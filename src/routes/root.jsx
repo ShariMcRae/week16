@@ -1,3 +1,12 @@
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Nav from 'react-bootstrap/Nav';
+import Alert from 'react-bootstrap/Alert';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
+import "../index.css";
+//import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
 import { 
   Outlet, 
   Link, 
@@ -62,14 +71,15 @@ export default function Root() {
                     </Link>
                   </li>
                 ))}
-              </ul>
+              </ul>  
             ) : (
               <p>
                 <i>No recipes.</i>
               </p>
             )}
-          </nav>
-        </div>
+</nav>
+
+</div>
         <div id="detail"><Outlet /></div>
       </>
     );
