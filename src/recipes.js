@@ -18,9 +18,9 @@ console.log("createRecipe in recipes.js sending in id: " + id);
         "imageURL": "",
         "favorite": false
     } ;
-  await recipesApi.createRecipe(recipe);
-
-  return getRecipes("");
+  return await recipesApi.createRecipe(recipe);
+// console.log("newly created newRecipe=", newRecipe);
+//   return newRecipe; //getRecipes("");
 }
 
 export async function getRecipe(id) {

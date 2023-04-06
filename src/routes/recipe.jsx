@@ -1,45 +1,42 @@
-
 import { Form, useLoaderData } from "react-router-dom";
 import { getRecipe } from "../recipes";
+import Button from "react-bootstrap/Button";
 
 export async function loader({ params }) {
-
-console.log("recipe.jsx, params = " + JSON.stringify(params));
-    const recipe = await getRecipe(params.recipeId);
-    return { recipe };
-  }
+  console.log("recipe.jsx, params = " + JSON.stringify(params));
+  const recipe = await getRecipe(params.recipeId);
+  return { recipe };
+}
 
 export default function Recipe() {
-    const { recipe } = useLoaderData();
-console.log("recipe.jsx, in Recipe, recipe = " + JSON.stringify(recipe));    
-console.log("recipe.jsx, in Recipe, recipe.desc = " + recipe.desc);    
+  const { recipe } = useLoaderData();
 
   return (
     <div id="recipe">
       <div>
-        <img alt="Recipe"
+      {recipe.imageURL ? 
+        <img
+          alt="Recipe"
+          className="img-thumbnail"
           key={recipe.imageURL}
           src={recipe.imageURL || null}
-        />
+        /> : <i>No Image</i>}{" "}
+        
       </div>
 
       <div>
-        <h1>
-          {recipe.desc ? (
-            <>
-              {recipe.desc}
-            </>
-          ) : (
-            <i>No Description</i>
-          )}{" "}
+        <h3>
+          {recipe.desc ? <>{recipe.desc}</> : <i>No Description</i>}{" "}
           <Favorite recipe={recipe} />
-        </h1>
+        </h3>
 
         {recipe.instructions && <p>{recipe.instructions}</p>}
 
-        <div>
+        <div class="d-flex justify-content-start">
           <Form action="edit">
-            <button type="submit">Edit</button>
+            <Button type="submit" className="me-2">
+              Edit
+            </Button>
           </Form>
           <Form
             method="post"
@@ -54,7 +51,7 @@ console.log("recipe.jsx, in Recipe, recipe.desc = " + recipe.desc);
               }
             }}
           >
-            <button type="submit">Delete</button>
+            <Button type="submit">Delete</Button>
           </Form>
         </div>
       </div>
@@ -67,17 +64,13 @@ function Favorite({ recipe }) {
   let favorite = recipe.favorite;
   return (
     <Form method="post">
-      <button
+      <Button
         name="favorite"
         value={favorite ? "false" : "true"}
-        aria-label={
-          favorite
-            ? "Remove from favorites"
-            : "Add to favorites"
-        }
+        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
       >
         {favorite ? "★" : "☆"}
-      </button>
+      </Button>
     </Form>
   );
 }

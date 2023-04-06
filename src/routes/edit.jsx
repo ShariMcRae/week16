@@ -1,56 +1,72 @@
-import { 
-    Form, 
-    useLoaderData,   
-    redirect,
-} from "react-router-dom";
+import { Form, useLoaderData, redirect } from "react-router-dom";
 import { updateRecipe } from "../recipes";
 
+import FormGroup from "react-bootstrap/FormGroup";
+import FormControl from "react-bootstrap/FormControl";
+import FormText from "react-bootstrap/FormText";
+import Button from "react-bootstrap/Button";
+
 export async function action({ request, params }) {
-    const formData = await request.formData();
-    const updates = Object.fromEntries(formData);
-console.log("edit action submitting update = ", updates);   
-console.log("params.recipeId", params.recipeId); 
-    await updateRecipe(params.recipeId, updates);
-    return redirect(`/recipes/${params.recipeId}`);
-  }
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+  await updateRecipe(params.recipeId, updates);
+  return redirect(`/recipes/${params.recipeId}`);
+}
 
 export default function EditRecipe() {
   const { recipe } = useLoaderData();
 
   return (
-    <Form method="post" id="recipe-form">
+    <Form method="post">
+      <h3>Edit Recipe</h3>
 
-      <label>
-        <span>Desc</span>
-        <input
-          placeholder="Description"
-          aria-label="Description"
-          type="text"
-          name="desc"
-          defaultValue={recipe.desc}
-        />
-      </label>    <br/>  
-      <label>
-        <span>Image URL</span>
-        <input
-          placeholder="image URL"
-          aria-label="image URL"
-          type="text"
-          name="imageURL"
-          defaultValue={recipe.imageURL}
-        />
-      </label><br/>
-      <label>
-        <span>Instruction</span>
-        <textarea
-          name="instructions"
-          defaultValue={recipe.instructions}
-          rows={6}
-        />
-      </label>
+      <FormGroup className="mb-3">
+        <label>
+          <span>Description</span>
+          <FormControl
+            type="text"
+            maxlength="30"
+            placeholder="Description"
+            name="desc"
+            defaultValue={recipe.desc}
+            aria-label="Description"
+            style={{ width: "30rem" }}
+          />
+          <FormText className="text-muted">(maximum length is 30)</FormText>
+        </label>
+      </FormGroup>
+
+      <FormGroup className="mb-3">
+        <label>
+          <span>Image URL</span>
+          <FormControl
+            type="text"
+            placeholder="Image URL"
+            name="imageURL"
+            defaultValue={recipe.imageURL}
+            aria-label="Image URL"
+            style={{ width: "30rem" }}
+          />
+        </label>
+      </FormGroup>
+
+      <FormGroup className="mb-3">
+        <label>
+          <span>Instruction</span>
+          <FormControl
+            as="textarea"
+            placeholder="Instruction"
+            name="instructions"
+            defaultValue={recipe.instructions}
+            aria-label="Instruction"
+            style={{ height: "10rem", width: "30rem" }}
+          />
+        </label>
+      </FormGroup>
       <p>
-        <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+        <Button type="submit">Save</Button>
+        {"  "}
+        <Button type="button">Cancel</Button>
       </p>
     </Form>
   );
