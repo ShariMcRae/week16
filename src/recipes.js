@@ -1,52 +1,86 @@
-import { recipesApi } from './rest/RecipesApi.js';
+// Provides CRUD methods for accessing the
+// data located at MockApi.com.
+
+const RECIPES_ENDPOINT =
+  "https://642e25ec2b883abc6407dd04.mockapi.io/api/v1/recipes";
 
 export async function getRecipes(query) {
-  await fakeNetwork(`getRecipes:${query}`);
-  let recipes = await recipesApi.getRecipes(query);
-  if (!recipes) recipes = [];
-  return recipes; 
+  try {
+    const url = new URL(RECIPES_ENDPOINT);
+    url.searchParams.append("description", query ? query : "");
+    url.searchParams.append('sortBy', 'description');
+    url.searchParams.append('order', 'asc');
+    const resp = await fetch(url);
+    const recipes = await resp.json();
+    if (!recipes) return [];
+    else return recipes;
+  } catch (e) {
+    const msg = "Error occurred in RecipesApi.getRecipes get method.";
+    console.log(msg, e);
+    throw new Error(msg);
+  }
 }
 
-export async function createRecipe() {
-  await fakeNetwork();
-  let recipe =  {
-    desc: "",
-    instructions: "",
-    ingredients: [],
-    imageURL: "",
-    favorite: false
-  };
-  return await recipesApi.createRecipe(recipe);
+export async function createRecipe(recipe) {
+  try {
+    const resp = await fetch(`${RECIPES_ENDPOINT}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recipe),
+    });
+    return await resp.json();
+  } catch (e) {
+    const msg = "Error occurred in RecipesApi.createRecipe get method.";
+    console.log(msg, e);
+    throw new Error(msg);
+  }
 }
 
 export async function getRecipe(id) {
-  await fakeNetwork(`recipe:${id}`);
-  return recipesApi.getRecipe(id); 
+  try {
+    const url = new URL(RECIPES_ENDPOINT);
+    url.searchParams.append("id", id);
+    const resp = await fetch(url);
+    const data = await resp.json();
+    return data ? data[0] ?? null : {};
+  } catch (e) {
+    const msg = "Error occurred in RecipesApi.getRecipe get method.";
+    console.log(msg, e);
+    throw new Error(msg);
+  }
 }
 
 export async function updateRecipe(id, updates) {
-  await fakeNetwork(); 
-  return recipesApi.updateRecipe(id, updates);
+  try {
+    const resp = await fetch(`${RECIPES_ENDPOINT}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updates),
+    });
+    return await resp.json();
+  } catch (e) {
+    const msg = "Error occurred in RecipesApi.updateRecipe get method.";
+    console.log(msg, e);
+    throw new Error(msg);
+  }
 }
 
 export async function deleteRecipe(id) {
-  return recipesApi.deleteRecipe(id);
-}
-
-// fake a cache so we don't slow down stuff we've already seen
-let fakeCache = {};
-
-async function fakeNetwork(key) {
-  if (!key) {
-    fakeCache = {};
+  try {
+    const resp = await fetch(`${RECIPES_ENDPOINT}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await resp.json();
+  } catch (e) {
+    const msg = "Error occurred in RecipesApi.deleteRecipe get method.";
+    console.log(msg, e);
+    throw new Error(msg);
   }
-
-  if (fakeCache[key]) {
-    return;
-  }
-
-  fakeCache[key] = true;
-  return new Promise(res => {
-    setTimeout(res, Math.random() * 800);
-  });
 }

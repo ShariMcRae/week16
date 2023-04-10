@@ -5,55 +5,63 @@ import {
   RouterProvider 
 } from "react-router-dom";
 
-import Recipe, {
-  loader as recipeLoader,
-  action as recipeAction,
-} from "./routes/recipe";
+import DisplayRecipe, { loader as recipeLoader } from "./components/DisplayRecipe";
+import { action as editStarAction } from "./components/FavoriteStar";
 
-import Root, {
-  loader as rootLoader,
-  action as rootAction,
-} from "./routes/root";
+import Layout, {
+  loader as layoutLoader,
+} from "./components/Layout";
+
+import {
+  action as createRecipe,
+} from "./components/SearchRecipes";
 
 import EditRecipe, { 
+  loader as editRecipeLoader,
   action as editAction 
-} from "./routes/edit";
+} from "./components/EditRecipe";
 
 import { 
   action as deleteAction 
 } from "./routes/delete";
 
+import Settings from "./components/Settings";
+import Default from "./components/Default";
 import ErrorPage from "./error-page";
-import Index from "./routes/index";
 
+// Define our routes for React Router.
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
-    loader: rootLoader,
-    action: rootAction,
+    element: <Layout />,
+    loader: layoutLoader,
+    action: createRecipe,
     errorElement: <ErrorPage />,
     children: [
       {
         errorElement: <ErrorPage />,
         children: [
-          { index: true, element: <Index /> },
+          { index: true, element: <Default /> },
           {
             path: "recipes/:recipeId",
-            element: <Recipe />,
+            element: <DisplayRecipe />,
             loader: recipeLoader,
-            action: recipeAction,
+            action: editStarAction,
           },
           {
             path: "recipes/:recipeId/edit",
             element: <EditRecipe />,
-            loader: recipeLoader,
+            loader: editRecipeLoader,
             action: editAction,
           },
           {
             path: "recipes/:recipeId/delete",
             action: deleteAction,
           },
+          {
+            path: "settings",
+            element: <Settings />,
+          },          
         ],
       },
     ],
