@@ -1,43 +1,35 @@
+// Class RecipesApi provides CRUD methods for accessing the
+// data located at MockApi.com. We create one instance and export it.
 
 const RECIPES_ENDPOINT = "https://642e25ec2b883abc6407dd04.mockapi.io/api/v1/recipes";
 class RecipesApi {
 
-  // static async getFamilyMember(id) {
-
-  //   const response = await fetch(
-  //     this.url + `/${id}`, 
-  //     {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" }
-  //     });
-  //   return await response.json();
-  // }
-
   getRecipes = async (query) => {
     try {
       const url = new URL(RECIPES_ENDPOINT);
-      url.searchParams.append('desc', query);     
-console.log("url", url);       
+      url.searchParams.append('desc', query?query:"");           
       const resp = await fetch(url);
       const data = await resp.json();
       return data;
     } catch (e) {
-      throw new Error("Error occurred in RecipesApi.getRecipes get method.");
+      const msg = "Error occurred in RecipesApi.getRecipes get method.";
+      console.log(msg, e);
+      throw new Error(msg);
     }
   };
 
   getRecipe = async (id) => {
     try {
-
-  console.log("RecipesApi.getRecipe, id=" + id);
       const url = new URL(RECIPES_ENDPOINT);
-      url.searchParams.append('id', id);
-  console.log("url", url);         
+      url.searchParams.append('id', id); 
       const resp = await fetch(url);
       const data = await resp.json();
-      return (data? data[0] : {});
+      return (data? data[0] ?? null : {});
+      
     } catch (e) {
-      console.log("Error occurred in RecipesApi.getRecipe get method.", e);
+      const msg = "Error occurred in RecipesApi.getRecipe get method.";
+      console.log(msg, e);
+      throw new Error(msg);
     }
   };
 
@@ -53,13 +45,14 @@ console.log("url", url);
       return await resp.json();
       
     } catch (e) {
-      console.log("Error occurred in RecipesApi.updateRecipe put method.", e);
+      const msg = "Error occurred in RecipesApi.updateRecipe get method.";
+      console.log(msg, e);
+      throw new Error(msg);
     }
   };
 
   createRecipe = async (recipe) => {
-    try {
-console.log("createRecipe supplying recipe = ", recipe);      
+    try {    
       const resp = await fetch(`${RECIPES_ENDPOINT}`, {
         method: "POST",
         headers: {
@@ -70,11 +63,13 @@ console.log("createRecipe supplying recipe = ", recipe);
       return await resp.json();
       
     } catch (e) {
-      console.log("Error occurred in RecipesApi.createRecipe post method.", e);
+      const msg = "Error occurred in RecipesApi.createRecipe get method.";
+      console.log(msg, e);
+      throw new Error(msg);
     }
   }; 
   
-  delete = async (id) => {
+  deleteRecipe = async (id) => {
     try {
       const resp = await fetch(`${RECIPES_ENDPOINT}/${id}`, {
         method: "DELETE",
@@ -85,10 +80,11 @@ console.log("createRecipe supplying recipe = ", recipe);
       return await resp.json();
       
     } catch (e) {
-      console.log("Error occurred in RecipesApi delete method.", e);
+      const msg = "Error occurred in RecipesApi.deleteRecipe get method.";
+      console.log(msg, e);
+      throw new Error(msg);
     }
   };
-
 }
 
 export const recipesApi = new RecipesApi();

@@ -1,4 +1,9 @@
-import { Form, useLoaderData, redirect } from "react-router-dom";
+import { 
+  Form, 
+  useLoaderData, 
+  redirect,
+  useNavigate 
+} from "react-router-dom";
 import { updateRecipe } from "../recipes";
 
 import FormGroup from "react-bootstrap/FormGroup";
@@ -15,6 +20,7 @@ export async function action({ request, params }) {
 
 export default function EditRecipe() {
   const { recipe } = useLoaderData();
+  const navigate = useNavigate();
 
   return (
     <Form method="post">
@@ -25,7 +31,7 @@ export default function EditRecipe() {
           <span>Description</span>
           <FormControl
             type="text"
-            maxlength="30"
+            maxLength="30"
             placeholder="Description"
             name="desc"
             defaultValue={recipe.desc}
@@ -65,8 +71,14 @@ export default function EditRecipe() {
       </FormGroup>
       <p>
         <Button type="submit">Save</Button>
-        {"  "}
-        <Button type="button">Cancel</Button>
+          {"  "}
+        <Button 
+          type="button"
+          onClick={() => {
+            navigate(-1);
+          }}>
+            Cancel
+        </Button>
       </p>
     </Form>
   );

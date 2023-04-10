@@ -1,25 +1,29 @@
-
 import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Nav from "react-bootstrap/Nav";
 import Alert from "react-bootstrap/Alert";
-import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
-import "../index.css";
-import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import FormControl from "react-bootstrap/FormControl";
 
-import { 
-  Outlet, 
-  useLoaderData, 
-  Form, 
+import { useEffect } from "react";
+import InputGroup from "react-bootstrap/InputGroup";
+import {
+  Outlet,
+  useLoaderData,
+  Form,
   NavLink,
-  redirect 
+  redirect,
+  useNavigation,
+  useSubmit,
 } from "react-router-dom";
 import { getRecipes, createRecipe } from "../recipes";
+import myImage from "../images/dinnerPlate.webp";
 
-export async function loader() {
-  const recipes = await getRecipes("");
-  return { recipes };
+import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../index.css";
+
+export async function loader({ request }) {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const recipes = await getRecipes(q);
+  return { recipes, q };
 }
 
 export async function action() {
@@ -28,33 +32,50 @@ export async function action() {
 }
 
 export default function Root() {
-  const { recipes } = useLoaderData();
+  const { recipes, q } = useLoaderData();
+  const navigation = useNavigation();
+  const submit = useSubmit();
+
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
+
+  useEffect(() => {
+    document.getElementById("q").value = q;
+  }, [q]);
+
   return (
     <>
       <div id="sidebar">
-        <h1>Recipes</h1>
+        <h3>
+          <img width="50" src={myImage} />
+          <span className="px-3">Recipe Library</span>
+        </h3>
         <div>
           <Form id="search-form" role="search">
-            <input
-              id="q"
-              aria-label="Search recipes"
-              placeholder="Search"
-              type="search"
-              name="q" style={{ width: '15rem' }}
-            />
-
-{/* <FormControl
-            id="q"
-            type="text"
-            placeholder="Search"
-            name="q"
-            aria-label="Query String"
-            style={{ width: "15rem" }}
-          /> */}
-
-            
-            <div id="search-spinner" aria-hidden hidden={true} />
-            <div className="sr-only" aria-live="polite"></div>
+            <InputGroup>
+              <InputGroup.Text
+                id="search-symbol"
+                className={searching ? "loading" : ""}
+              >
+                🔍
+              </InputGroup.Text>
+              <FormControl
+                id="q"
+                aria-label="Search recipes"
+                placeholder="Search"
+                type="search"
+                defaultValue={q}
+                onChange={(event) => {
+                  const isFirstSearch = q == null;
+                  submit(event.currentTarget.form, {
+                    replace: !isFirstSearch,
+                  });
+                }}
+                name="q"
+                style={{ width: "12rem" }}
+              />
+            </InputGroup>
           </Form>
           {/* Because we use the post method, the <Root> will be refreshed. */}
           <Form method="post">
@@ -65,21 +86,18 @@ export default function Root() {
           {recipes.length ? (
             <>
               {recipes.map((recipe) => (
-                <NavLink key={recipe.id} 
-                         to={`recipes/${recipe.id}`}
-                         className={({ isActive, isPending }) =>
-                            isActive
-                              ? "active"
-                              : isPending
-                              ? "pending"
-                              : ""
-                          }>
+                <NavLink
+                  key={recipe.id}
+                  to={`recipes/${recipe.id}`}
+                  className={({ isActive, isPending }) =>
+                    isActive ? "active" : isPending ? "pending" : ""
+                  }
+                >
                   <Alert variant="light">
                     {recipe.desc ? <>{recipe.desc}</> : <i>No Description</i>}{" "}
                     {recipe.favorite && <span>★</span>}
                   </Alert>
                 </NavLink>
-
               ))}
             </>
           ) : (
@@ -89,7 +107,10 @@ export default function Root() {
           )}
         </nav>
       </div>
-      <div id="detail">
+      <div
+        id="detail"
+        className={navigation.state === "loading" ? "loading" : ""}
+      >
         <Outlet />
       </div>
     </>

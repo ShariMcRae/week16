@@ -9,46 +9,29 @@ export async function getRecipes(query) {
 
 export async function createRecipe() {
   await fakeNetwork();
-  let id = Math.random().toString(36).substring(2, 9);
-console.log("createRecipe in recipes.js sending in id: " + id);  
-    let recipe =  {
-        "desc": "",
-        "instructions": "",
-        "ingredients": [],
-        "imageURL": "",
-        "favorite": false
-    } ;
+  let recipe =  {
+    desc: "",
+    instructions: "",
+    ingredients: [],
+    imageURL: "",
+    favorite: false
+  };
   return await recipesApi.createRecipe(recipe);
-// console.log("newly created newRecipe=", newRecipe);
-//   return newRecipe; //getRecipes("");
 }
 
 export async function getRecipe(id) {
   await fakeNetwork(`recipe:${id}`);
-  let recipe = recipesApi.getRecipe(id);
-  return recipe ?? null;
+  return recipesApi.getRecipe(id); 
 }
 
 export async function updateRecipe(id, updates) {
-  await fakeNetwork();
-console.log("recipes, updateRecipe, updates = ", updates);  
+  await fakeNetwork(); 
   return recipesApi.updateRecipe(id, updates);
 }
 
-// export async function deleteRecipe(id) {
-//   let contacts = await localforage.getItem("contacts");
-//   let index = contacts.findIndex(contact => contact.id === id);
-//   if (index > -1) {
-//     contacts.splice(index, 1);
-//     await set(contacts);
-//     return true;
-//   }
-//   return false;
-// }
-
-// function set(contacts) {
-//   return localforage.setItem("contacts", contacts);
-// }
+export async function deleteRecipe(id) {
+  return recipesApi.deleteRecipe(id);
+}
 
 // fake a cache so we don't slow down stuff we've already seen
 let fakeCache = {};
