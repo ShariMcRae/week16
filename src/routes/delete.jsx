@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { deleteRecipe } from "../recipes";
+import { deleteRecipe } from "../rest/recipes";
 
 // Delete the specified recipe and 
 // redirect to the home page.

@@ -1,5 +1,5 @@
 import { Form, useLoaderData } from "react-router-dom";
-import { getRecipe } from "../recipes";
+import { getRecipe } from "../rest/recipes";
 import Button from "react-bootstrap/Button";
 import FavoriteStar from "./FavoriteStar";
 

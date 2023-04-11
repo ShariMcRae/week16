@@ -1,7 +1,7 @@
 
 import { Outlet, useLoaderData, NavLink } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import { getRecipes} from "../recipes";
+import { getRecipes } from "../rest/recipes";
 import recipeImg from "../images/dinnerPlate.webp";
 import settingsImg from "../images/settings.webp";
 import SearchRecipes from "./SearchRecipes";
@@ -14,7 +14,7 @@ import "../index.css";
 export async function loader({ request }) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
-  const recipes = await getRecipes(q);
+  const recipes = await getRecipes(q, "description", "asc");
   return { recipes, q };
 }
 

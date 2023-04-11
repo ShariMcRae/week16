@@ -3,7 +3,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import { Form, useSubmit, redirect } from "react-router-dom";
 import { useEffect } from "react";
-import { createRecipe } from "../recipes";
+import { createRecipe } from "../rest/recipes";
 
 // Create a new recipe record when they click
 // the New button and navigate to the edit recipe page.

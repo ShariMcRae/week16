@@ -1,0 +1,17 @@
+div.card-header {
+    background-color: rgb(216, 193, 240);
+}
+
+div.card-footer {
+    background-color: rgb(241, 233, 249);
+}
+
+button.btn-primary {
+    background-color: rgb(180, 113, 246);
+}
+
+div.list-group-item {
+    padding: .75rem;
+    border-color: rgb(180, 113, 246);
+    background-color: rgb(241, 238, 243);
+}

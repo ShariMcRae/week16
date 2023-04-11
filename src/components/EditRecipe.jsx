@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { updateRecipe, getRecipe } from "../recipes";
+import { updateRecipe, getRecipe } from "../rest/recipes";
+import Ingredients from "./Ingredients";
 
 import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
@@ -18,6 +20,7 @@ export async function action({ request, params }) {
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
 export async function loader({ params }) {
+console.log("CALLING LOADER");  
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
   return { recipe };
@@ -25,11 +28,39 @@ export async function loader({ params }) {
 
 // Render the form for editing a recipe.
 export default function EditRecipe() {
-  const { recipe } = useLoaderData();
   const navigate = useNavigate();
+  const { recipe } = useLoaderData();
+//   const [recipe, setRecipe] = useState(useLoaderData().recipe);
+
+
+// console.log("inside EditRecipe, recipe", JSON.stringify(recipe));
+// console.log("inside EditRecipe, recipe.description", recipe.description);
+// console.log("inside EditRecipe, recipe.instructions", recipe.instructions);
+
+//   const updateRecipe = (updatedRecipe) => {
+//     setRecipe(updatedRecipe);
+//   };
+
+//   const [instructions, setInstructions] = useState(recipe.instructions);
+//   const [imageURL, setImageURL] = useState(recipe.imageURL);
+//   const [description, setDescription] = useState(recipe.description);
+  
+
+//   const handleSubmit = async (event) => {
+
+//     event.preventDefault();
+//     const updatedRecipe = { ...recipe, 
+//       description: description, 
+//       imageURL: imageURL, 
+//       instructions: instructions};
+//     await updateRecipe(updatedRecipe.recipeId, updatedRecipe);
+//     setRecipe(updatedRecipe);
+    
+//   };  
 
   return (
     <>
+      {/* <Form onSubmit={handleSubmit}> */}
       <Form method="post">
         <h3>Edit Recipe</h3>
 
@@ -42,6 +73,7 @@ export default function EditRecipe() {
               placeholder="Description"
               name="description"
               defaultValue={recipe.description}
+              //onChange={(e) => setDescription(e.target.value)}              
               aria-label="Description"
               style={{ width: "30rem" }}
             />
@@ -57,6 +89,7 @@ export default function EditRecipe() {
               placeholder="Image URL"
               name="imageURL"
               defaultValue={recipe.imageURL}
+              //onChange={(e) => setImageURL(e.target.value)}              
               aria-label="Image URL"
               style={{ width: "30rem" }}
             />
@@ -71,6 +104,7 @@ export default function EditRecipe() {
               placeholder="Instruction"
               name="instructions"
               defaultValue={recipe.instructions}
+              //onChange={(e) => setInstructions(e.target.value)}              
               aria-label="Instruction"
               style={{ height: "10rem", width: "30rem" }}
             />
@@ -89,6 +123,7 @@ export default function EditRecipe() {
           </Button>
         </p>
       </Form>
+      {/* <Ingredients recipe={recipe} updateRecipe={updateRecipe}/> */}
     </>
   );
 }

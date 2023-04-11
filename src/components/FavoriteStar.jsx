@@ -1,6 +1,6 @@
 import { useFetcher } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import { updateRecipe } from "../recipes";
+import { updateRecipe } from "../rest/recipes";
 
 // Update recipe.favorite property.
 export async function action({ request, params }) {
