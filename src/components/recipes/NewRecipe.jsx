@@ -3,7 +3,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import { Form, useSubmit, redirect } from "react-router-dom";
 import { useEffect } from "react";
-import { createRecipe } from "../rest/recipes";
+import { createRecipe } from "../../rest/recipes";
 
 // Create a new recipe record when they click
 // the New button and navigate to the edit recipe page.
@@ -19,7 +19,7 @@ export async function action() {
   return redirect(`/recipes/${recipe.id}/edit`);
 }
 
-export default function SearchRecipes({ q }) {
+export default function NewRecipe({ q }) {
   const submit = useSubmit();
 
   // Update the search input field if they use
@@ -31,11 +31,11 @@ export default function SearchRecipes({ q }) {
   return (
     <div className="search">
       <Form id="search-form" role="search">
-        <InputGroup id="search">
+        <InputGroup id="search" className="d-flex flex-nowrap">
           <InputGroup.Text id="search-symbol">🔍</InputGroup.Text>
           <FormControl
             id="q"
-            aria-label="Search recipes"
+            aria-label="Search recipes."
             placeholder="Search"
             type="search"
             defaultValue={q}

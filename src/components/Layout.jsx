@@ -1,13 +1,12 @@
-
 import { Outlet, useLoaderData, NavLink } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { getRecipes } from "../rest/recipes";
 import recipeImg from "../images/dinnerPlate.webp";
-import settingsImg from "../images/settings.webp";
-import SearchRecipes from "./SearchRecipes";
-import RecipeList from "./RecipeList";
+import NewRecipe from "./recipes/NewRecipe";
+import RecipeList from "./recipes/RecipeList";
 import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import "../index.css";
+import "../css/index.css";
+import { useState } from "react";
 
 // Load the list of recipes matching the
 // search parameters.
@@ -23,20 +22,28 @@ export async function loader({ request }) {
 export default function Layout() {
   const { recipes, q } = useLoaderData();
 
+  const [isHidden, setIsHidden] = useState(false);
+
+  const toggleClass = () => {
+    setIsHidden(!isHidden);
+  };
+
   return (
     <>
-      <div id="sidebar">
-        <h3>
-          <img width="50" src={recipeImg} alt="Recipe icon."/>
-          <span className="ps-2 pe-4">Recipe Library</span>          
-          <NavLink to={`settings`}>
-            <Button className="btn-sm"><img width="25" src={settingsImg} alt="Recipe icon."/></Button> 
-          </NavLink>
+      <div id="sidebar" className={` ${isHidden ? "hidden" : ""}`}>
+        <h3 className="d-flex flex-nowrap">
+          <img width="50" className="ms-2" src={recipeImg} alt="Recipe icon." />
+          <span className="ps-4 pt-2">Recipe Library</span>
         </h3>
-        <SearchRecipes q={q}/>
-        <RecipeList recipes={recipes}/>
+        <NewRecipe q={q} />
+        <RecipeList recipes={recipes} />
       </div>
-
+      <div
+        id="hideBar"
+        onClick={toggleClass}
+        data-toggle="tooltip"
+        title="Click to hide/show menu!"
+      ></div>
       <div id="detail" className="px-5 py-4">
         <Outlet />
       </div>

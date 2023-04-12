@@ -1,14 +1,14 @@
 import { Form, useLoaderData } from "react-router-dom";
-import { getRecipe } from "../rest/recipes";
+import { getRecipe } from "../../rest/recipes";
 import Button from "react-bootstrap/Button";
+import ListGroup from "react-bootstrap/ListGroup";
 import FavoriteStar from "./FavoriteStar";
 
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
 export async function loader({ params }) {
   const recipe = await getRecipe(params.recipeId);
-  if (!recipe) 
-    throw new Error("Recipe not found.");
+  if (!recipe) throw new Error("Recipe not found.");
   return { recipe };
 }
 
@@ -18,7 +18,7 @@ export default function DisplayRecipe() {
   const { recipe } = useLoaderData();
   return (
     <div id="recipe">
-      <div>
+      <div className="me-4">
         {recipe.imageURL ? (
           <img
             alt="Recipe"
@@ -29,9 +29,6 @@ export default function DisplayRecipe() {
         ) : (
           <i>No Image</i>
         )}{" "}
-      </div>
-
-      <div>
         <h3>
           {recipe.description ? (
             <>{recipe.description}</>
@@ -40,9 +37,23 @@ export default function DisplayRecipe() {
           )}{" "}
           <FavoriteStar recipe={recipe} />
         </h3>
+        {recipe.ingredients && (
+          <div className="my-3">
+            <h5>Ingredients</h5>
+            {recipe.ingredients.map((ingredient, index) => (
+              <ListGroup.Item key={index}>
+                <span>{ingredient}</span>
+              </ListGroup.Item>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        <h5>Instructions</h5>
+        {recipe.instructions && <p className="me-5">{recipe.instructions}</p>}
+      </div>
 
-        {recipe.instructions && <p>{recipe.instructions}</p>}
-
+      <div>
         <div className="d-flex justify-content-start">
           <Form action="edit">
             <Button type="submit" className="me-2">

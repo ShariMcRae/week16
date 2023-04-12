@@ -1,33 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { 
-  createBrowserRouter, 
-  RouterProvider 
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import DisplayRecipe, { loader as recipeLoader } from "./components/DisplayRecipe";
-import { action as editStarAction } from "./components/FavoriteStar";
+import DisplayRecipe, { loader as recipeLoader } from "./components/recipes/DisplayRecipe";
+import Layout, { loader as layoutLoader } from "./components/Layout";
+import EditRecipe, { loader as editRecipeLoader, action as editAction } 
+from "./components/recipes/EditRecipe";
 
-import Layout, {
-  loader as layoutLoader,
-} from "./components/Layout";
-
-import {
-  action as createRecipe,
-} from "./components/SearchRecipes";
-
-import EditRecipe, { 
-  loader as editRecipeLoader,
-  action as editAction 
-} from "./components/EditRecipe";
-
-import { 
-  action as deleteAction 
-} from "./routes/delete";
-
-import Settings from "./components/Settings";
 import Default from "./components/Default";
-import ErrorPage from "./error-page";
+import ErrorPage from "./components/ErrorPage";
+
+import { action as deleteAction } from "./routes/delete";
+import { action as createRecipe } from "./components/recipes/NewRecipe";
+import { action as editStarAction } from "./components/recipes/FavoriteStar";
 
 // Define our routes for React Router.
 const router = createBrowserRouter([
@@ -58,10 +43,6 @@ const router = createBrowserRouter([
             path: "recipes/:recipeId/delete",
             action: deleteAction,
           },
-          {
-            path: "settings",
-            element: <Settings />,
-          },          
         ],
       },
     ],

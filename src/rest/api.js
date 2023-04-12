@@ -1,10 +1,10 @@
 // Provides CRUD methods for accessing the
 // data located at MockApi.com.
 
-export async function getRecords(query, endpoint, sortBy, sortOrder) {
+export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
   try {
     const url = new URL(endpoint);
-    url.searchParams.append("description", query ? query : "");
+    url.searchParams.append(searchBy, query ? query : "");
     url.searchParams.append('sortBy', sortBy);
     url.searchParams.append('order', sortOrder);
     const resp = await fetch(url);

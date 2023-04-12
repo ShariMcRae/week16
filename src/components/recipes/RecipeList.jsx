@@ -9,13 +9,13 @@ export default function RecipeList({ recipes }) {
         <>
           {recipes.map((recipe) => (
             <NavLink key={recipe.id} to={`recipes/${recipe.id}`}>
-              <Alert variant="light">
+              <Alert variant="light" className="d-flex flex-nowrap">
                 {recipe.description ? (
                   <>{recipe.description}</>
                 ) : (
                   <i>No Description</i>
                 )}{" "}
-                {recipe.favorite && <span>★</span>}
+                {recipe.favorite && <span className="ps-2">★</span>}
               </Alert>
             </NavLink>
           ))}

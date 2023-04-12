@@ -1,4 +1,14 @@
 
+span.body-format {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;  
+font-size: 1rem;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -174,6 +184,7 @@ button.btn-primary {
   flex: 1;
   padding: 2rem 4rem;
   width: 100%;
+  overflow: auto;
 }
 
 div.center-on-page {
@@ -184,4 +195,25 @@ div.center-on-page {
   width: 100%;
   height: 80%;
 } 
+
+div.ingredient-list-item {
+  padding: 2px;
+  padding-left: .5rem;
+  padding-bottom: 4px;
+}
+
+.hidden {
+  display:none !important;
+}
+
+#hideBar {
+  width:3px;
+  background-color:  rgb(249, 249, 250);
+}
+
+#hideBar:hover {
+  width:3px;
+  background-color: rgb(176, 200, 234);
+  cursor: ew-resize;
+}
 
