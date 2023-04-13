@@ -1,5 +1,4 @@
 import { Outlet, useLoaderData, NavLink } from "react-router-dom";
-import Button from "react-bootstrap/Button";
 import { getRecipes } from "../rest/recipes";
 import recipeImg from "../images/dinnerPlate.webp";
 import NewRecipe from "./recipes/NewRecipe";
@@ -7,6 +6,7 @@ import RecipeList from "./recipes/RecipeList";
 import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../css/index.css";
 import { useState } from "react";
+import React from "react";
 
 // Load the list of recipes matching the
 // search parameters.
@@ -20,6 +20,7 @@ export async function loader({ request }) {
 // Provides the page layout with a navigation
 // pane on the left side of the page.
 export default function Layout() {
+  // @ts-ignore
   const { recipes, q } = useLoaderData();
 
   const [isHidden, setIsHidden] = useState(false);

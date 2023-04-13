@@ -4,15 +4,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import DisplayRecipe, { loader as recipeLoader } from "./components/recipes/DisplayRecipe";
 import Layout, { loader as layoutLoader } from "./components/Layout";
-import EditRecipe, { loader as editRecipeLoader, action as editAction } 
-from "./components/recipes/EditRecipe";
+import EditRecipe, { loader as editRecipeLoader, action as saveRecipe } 
+  from "./components/recipes/EditRecipe";
 
 import Default from "./components/Default";
 import ErrorPage from "./components/ErrorPage";
 
-import { action as deleteAction } from "./routes/delete";
+import { action as deleteRecipe } from "./routes/delete";
 import { action as createRecipe } from "./components/recipes/NewRecipe";
-import { action as editStarAction } from "./components/recipes/FavoriteStar";
+import { action as toggleStar } from "./components/recipes/FavoriteStar";
 
 // Define our routes for React Router.
 const router = createBrowserRouter([
@@ -31,17 +31,17 @@ const router = createBrowserRouter([
             path: "recipes/:recipeId",
             element: <DisplayRecipe />,
             loader: recipeLoader,
-            action: editStarAction,
+            action: toggleStar,
           },
           {
             path: "recipes/:recipeId/edit",
             element: <EditRecipe />,
             loader: editRecipeLoader,
-            action: editAction,
+            action: saveRecipe,
           },
           {
             path: "recipes/:recipeId/delete",
-            action: deleteAction,
+            action: deleteRecipe,
           },
         ],
       },
@@ -49,6 +49,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+// @ts-ignore
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />

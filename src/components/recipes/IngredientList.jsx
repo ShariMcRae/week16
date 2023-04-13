@@ -1,4 +1,5 @@
-// @ts-nocheck
+import React from "react";
+import { useState } from "react";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -9,8 +10,6 @@ import Container from "react-bootstrap/Container";
 import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
-import { useState } from "react";
-import React from "react";
 
 export default function IngredientList({ ingredients }) {
   const [length, setLength] = useState(false);
@@ -23,6 +22,7 @@ export default function IngredientList({ ingredients }) {
 
   const addIngredient = () => {
     if (ingredients) ingredients.push(newIngredient);
+    // @ts-ignore
     document.getElementById("newIngredient").value = "";
     setLength(ingredients.length);
   };
@@ -62,7 +62,9 @@ export default function IngredientList({ ingredients }) {
 
         <Card.Footer>
           {" "}
-          <Stack gap="3" direction="horizontal">
+          <Stack 
+// @ts-ignore
+          gap="3" direction="horizontal">
             <FormControl
               id="newIngredient"
               aria-label="New Ingredient."
