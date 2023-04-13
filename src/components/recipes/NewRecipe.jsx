@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import { Form, useSubmit, redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { createRecipe } from "../../rest/recipes";
+import React from "react";
 
 // Create a new recipe record when they click
 // the New button and navigate to the edit recipe page.
@@ -25,6 +26,7 @@ export default function NewRecipe({ q }) {
   // Update the search input field if they use
   // the back or forward buttons.
   useEffect(() => {
+    // @ts-ignore
     document.getElementById("q").value = q;
   }, [q]);
 

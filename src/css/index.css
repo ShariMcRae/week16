@@ -169,7 +169,7 @@ button.btn-primary {
   border-color: #e3e3e3;
 }
 #recipes.nav div:hover {
-  background: #e3e3e3;
+  background: #f9f7f7;
 }
 
 #recipe img {
@@ -202,18 +202,22 @@ div.ingredient-list-item {
   padding-bottom: 4px;
 }
 
+div.ingredient-list-item:hover {
+  background: #f9f7f7;
+}
+
 .hidden {
   display:none !important;
 }
 
 #hideBar {
-  width:3px;
-  background-color:  rgb(249, 249, 250);
+  width:4px;
+  background-color: rgb(247, 248, 249);
 }
 
 #hideBar:hover {
-  width:3px;
-  background-color: rgb(176, 200, 234);
+  width:4px;
+  background-color: rgb(226, 228, 230);
   cursor: ew-resize;
 }
 

@@ -1,3 +1,4 @@
+import React from "react";
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
 import { updateRecipe, getRecipe } from "../../rest/recipes";
 
@@ -5,7 +6,6 @@ import Stack from "react-bootstrap/Stack";
 
 import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
-import FormText from "react-bootstrap/FormText";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -41,6 +41,7 @@ export async function loader({ params }) {
 // Render the form for editing a recipe.
 export default function EditRecipe() {
   const navigate = useNavigate();
+  // @ts-ignore
   const { recipe } = useLoaderData();
 
   return (
@@ -57,16 +58,12 @@ export default function EditRecipe() {
                 <span>Description</span>
                 <FormControl
                   type="text"
-                  maxLength="30"
                   placeholder="Description"
                   name="description"
                   defaultValue={recipe.description}
-                  style={{ width: "15rem" }}
+                  style={{ width: "20rem" }}
                   aria-label="Description"
                 />
-                <FormText className="text-muted">
-                  (maximum length is 30)
-                </FormText>
               </label>
             </FormGroup>
 
@@ -78,7 +75,7 @@ export default function EditRecipe() {
                   placeholder="Image URL"
                   name="imageURL"
                   defaultValue={recipe.imageURL}
-                  style={{ width: "15rem" }}
+                  style={{ width: "20rem" }}
                   aria-label="Image URL"
                 />
               </label>

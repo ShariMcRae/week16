@@ -3,6 +3,7 @@ import { getRecipe } from "../../rest/recipes";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import FavoriteStar from "./FavoriteStar";
+import React from "react";
 
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
@@ -15,6 +16,7 @@ export async function loader({ params }) {
 // Display specified recipe with buttons for
 // making it a favorite, editing, and deleting.
 export default function DisplayRecipe() {
+  // @ts-ignore
   const { recipe } = useLoaderData();
   return (
     <div id="recipe">

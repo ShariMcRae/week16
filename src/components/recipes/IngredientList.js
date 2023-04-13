@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -9,6 +10,7 @@ import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useState } from "react";
+import React from "react";
 
 export default function IngredientList({ ingredients }) {
   const [length, setLength] = useState(false);
