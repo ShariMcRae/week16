@@ -17,7 +17,7 @@ export async function action() {
     favorite: false,
   };
   recipe = await createRecipe(recipe);
-  return redirect(`/recipes/${recipe.id}/edit`);
+  return redirect(`/recipes/${recipe.id}`);
 }
 
 export default function NewRecipe({ q }) {
@@ -41,6 +41,9 @@ export default function NewRecipe({ q }) {
             placeholder="Search"
             type="search"
             defaultValue={q}
+            // If we are entering another character in our search field,
+            // do not update the navigation stack, so our back button
+            // will take us all the way back to a blank search query.
             onChange={(event) => {
               const isFirstSearch = q == null;
               submit(event.currentTarget.form, {

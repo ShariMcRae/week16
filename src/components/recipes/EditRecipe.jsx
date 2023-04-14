@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
 
 import Stack from "react-bootstrap/Stack";
@@ -33,11 +33,8 @@ export async function action({ request, params }) {
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
 export async function loader({ params }) {
-console.log("EditRecipe loader, params.recipeId=" + params.recipeId);  
-
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
-console.log("EditRecipe loader, recipe=" + JSON.stringify(recipe));  
   return { recipe };
 }
 
@@ -46,20 +43,13 @@ export default function EditRecipe() {
 
   // @ts-ignore
   const { recipe } = useLoaderData();
-console.log("EditRecipe, recipe=", recipe);
-  const [newRecipe, setNewRecipe] = useState({
-    description: recipe.description,
-    instructions: recipe.instructions,
-    imageURL: recipe.imageURL,
-    id: recipe.id,
-    ingredients: recipe.ingredients
-  });
+  const [newRecipe, setNewRecipe] = useState(recipe);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setNewRecipe({ ...newRecipe, [name]: value });
   };
-  const navigate = useNavigate();
 
   return (
     <Stack direction="horizontal">

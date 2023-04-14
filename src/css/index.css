@@ -176,7 +176,7 @@ button.btn-primary {
 #recipe img {
   width: 15rem;
   height: 15rem;
-  background: rgb(195, 205, 225);
+  background: rgb(221 225 233);
   margin-right: 2rem;
   border-radius: 1.5rem;
   object-fit: cover;

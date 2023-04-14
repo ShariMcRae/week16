@@ -21,22 +21,14 @@ export default function DisplayRecipe() {
   return (
     <div id="recipe">
       <div className="me-4">
-      <div>
-        <img className="img-thumbnail"
-          key={recipe.imageURL}
-          src={recipe.imageURL || null}
-        />
-      </div>        
-        {/* {recipe.imageURL ? (
+        <div>
           <img
-            alt="Recipe"
             className="img-thumbnail"
-            // key={recipe.imageURL}
+            key={recipe.imageURL}
             src={recipe.imageURL || null}
+            alt={recipe.description}
           />
-        ) : (
-          <i>No Image</i>
-        )}{" "} */}
+        </div>
         <h3>
           {recipe.description ? (
             <>{recipe.description}</>
