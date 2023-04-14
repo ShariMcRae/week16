@@ -22,7 +22,6 @@ export async function loader({ request }) {
 export default function Layout() {
   // @ts-ignore
   const { recipes, q } = useLoaderData();
-
   const [isHidden, setIsHidden] = useState(false);
 
   const toggleClass = () => {

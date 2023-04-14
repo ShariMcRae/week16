@@ -21,16 +21,22 @@ export default function DisplayRecipe() {
   return (
     <div id="recipe">
       <div className="me-4">
-        {recipe.imageURL ? (
+      <div>
+        <img className="img-thumbnail"
+          key={recipe.imageURL}
+          src={recipe.imageURL || null}
+        />
+      </div>        
+        {/* {recipe.imageURL ? (
           <img
             alt="Recipe"
             className="img-thumbnail"
-            key={recipe.imageURL}
+            // key={recipe.imageURL}
             src={recipe.imageURL || null}
           />
         ) : (
           <i>No Image</i>
-        )}{" "}
+        )}{" "} */}
         <h3>
           {recipe.description ? (
             <>{recipe.description}</>
@@ -39,7 +45,7 @@ export default function DisplayRecipe() {
           )}{" "}
           <FavoriteStar recipe={recipe} />
         </h3>
-        {recipe.ingredients && (
+        {recipe.ingredients && recipe.ingredients.length > 0 ? (
           <div className="my-3">
             <h5>Ingredients</h5>
             {recipe.ingredients.map((ingredient, index) => (
@@ -48,14 +54,26 @@ export default function DisplayRecipe() {
               </ListGroup.Item>
             ))}
           </div>
+        ) : (
+          <div className="my-3">
+            <i>No Ingredients</i>
+          </div>
         )}
       </div>
       <div>
-        <h5>Instructions</h5>
-        {recipe.instructions && <p className="me-5">{recipe.instructions}</p>}
+        {recipe.instructions ? (
+          <>
+            <h5>Instructions</h5>
+            <p className="me-5">{recipe.instructions}</p>
+          </>
+        ) : (
+          <p className="me-5">
+            <i>No Instructions</i>
+          </p>
+        )}
       </div>
 
-      <div>
+      <div className="pt-2">
         <div className="d-flex justify-content-start">
           <Form action="edit">
             <Button type="submit" className="me-2">

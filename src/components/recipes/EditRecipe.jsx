@@ -1,23 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { updateRecipe, getRecipe } from "../../rest/recipes";
 
 import Stack from "react-bootstrap/Stack";
-
 import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import IngredientList from "./IngredientList";
+
+import { updateRecipe, getRecipe } from "../../rest/recipes";
+import IngredientListEdit from "./IngredientListEdit";
 
 // Save changes to the recipe, and
-// redirect to the Recipe page.
+// redirect to the DisplayRecipe page.
 export async function action({ request, params }) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
 
-  // move ingredients into an array
+  // replace ingredient form entries with
+  // an array of ingredients
   const filteredKeys = Object.keys(updates).filter(key => key.startsWith("ingredients"));
   const ingredients = [];
   filteredKeys.forEach((key) => {
@@ -25,29 +26,45 @@ export async function action({ request, params }) {
     delete updates[key];
   });
 
-  await updateRecipe(params.recipeId, {...updates, ingredients: ingredients});
-  return redirect(`/recipes/${params.recipeId}`);
+  await updateRecipe(updates.id, {...updates, ingredients: ingredients});
+  return redirect(`/recipes/${updates.id}`);
 }
 
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
 export async function loader({ params }) {
-  console.log("CALLING LOADER");
+console.log("EditRecipe loader, params.recipeId=" + params.recipeId);  
+
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
+console.log("EditRecipe loader, recipe=" + JSON.stringify(recipe));  
   return { recipe };
 }
 
 // Render the form for editing a recipe.
 export default function EditRecipe() {
-  const navigate = useNavigate();
+
   // @ts-ignore
   const { recipe } = useLoaderData();
+console.log("EditRecipe, recipe=", recipe);
+  const [newRecipe, setNewRecipe] = useState({
+    description: recipe.description,
+    instructions: recipe.instructions,
+    imageURL: recipe.imageURL,
+    id: recipe.id,
+    ingredients: recipe.ingredients
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setNewRecipe({ ...newRecipe, [name]: value });
+  };
+  const navigate = useNavigate();
 
   return (
     <Stack direction="horizontal">
       <Form method="post">
-        <Row>
+        <Row className="my-3">
           <h3>Edit Recipe</h3>
         </Row>
         <Row>
@@ -59,8 +76,8 @@ export default function EditRecipe() {
                 <FormControl
                   type="text"
                   placeholder="Description"
-                  name="description"
-                  defaultValue={recipe.description}
+                  name="description" className="mt-1"
+                  value={newRecipe.description} onChange={handleChange} 
                   style={{ width: "20rem" }}
                   aria-label="Description"
                 />
@@ -73,26 +90,26 @@ export default function EditRecipe() {
                 <FormControl
                   type="text"
                   placeholder="Image URL"
-                  name="imageURL"
-                  defaultValue={recipe.imageURL}
+                  name="imageURL" className="mt-1"
+                  value={newRecipe.imageURL} onChange={handleChange}
                   style={{ width: "20rem" }}
                   aria-label="Image URL"
                 />
               </label>
             </FormGroup>
 
-            <IngredientList ingredients={recipe.ingredients} />
+            <IngredientListEdit ingredients={newRecipe.ingredients} />
 
           </Col>
           <Col>
             <FormGroup className="mb-3">
               <label>
                 <span>Instructions</span>
-                <FormControl
+                <FormControl className="mt-1"
                   as="textarea"
                   placeholder="Instruction"
                   name="instructions"
-                  defaultValue={recipe.instructions}
+                  value={newRecipe.instructions} onChange={handleChange}
                   aria-label="Instruction"
                   style={{ height: "20rem", width: "30rem" }}
                 />
@@ -100,14 +117,18 @@ export default function EditRecipe() {
             </FormGroup>
           </Col>
         </Row>
-        <Row>
+        <Row className="pt-2">
           <Col>
-            <Button type="submit">Save</Button>
-            {"  "}
+          <FormControl
+                type="hidden"
+                name="id"
+                value={newRecipe.id}
+              />
+            <Button type="submit" className="me-2">Save</Button>
             <Button
               type="button"
               onClick={() => {
-                navigate(-1);
+                navigate(`/recipes/${newRecipe.id}`);
               }}
             >
               Cancel
@@ -118,3 +139,4 @@ export default function EditRecipe() {
     </Stack>
   );
 }
+

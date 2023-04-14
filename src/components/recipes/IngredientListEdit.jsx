@@ -11,20 +11,23 @@ import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 
-export default function IngredientList({ ingredients }) {
-  const [length, setLength] = useState(false);
+export default function IngredientListEdit({ ingredients }) {
+
   const [newIngredient, setNewIngredient] = useState("");
+  const [newIngredients, setNewIngredients] = useState(
+    ingredients ? ingredients : []);
 
   const removeIngredient = (index) => {
-    ingredients.splice(index, 1);
-    setLength(ingredients.length);
+    let temp = [...newIngredients];
+    temp.splice(index, 1);
+    setNewIngredients(temp);
   };
 
   const addIngredient = () => {
-    if (ingredients) ingredients.push(newIngredient);
-    // @ts-ignore
-    document.getElementById("newIngredient").value = "";
-    setLength(ingredients.length);
+    let temp = [...newIngredients];
+    temp.push(newIngredient);
+    setNewIngredient("");
+    setNewIngredients(temp);
   };
 
   return (
@@ -40,7 +43,7 @@ export default function IngredientList({ ingredients }) {
           </Container>
         </Card.Header>
         <Card.Body className="p-0">
-          {ingredients.map((ingredient, index) => (
+          {newIngredients.map((ingredient, index) => (
             <ListGroup.Item className="ingredient-list-item border" key={index}>
               <Button
                 className="btn-sm me-1 pt-0 pb-0 me-2"
@@ -54,23 +57,22 @@ export default function IngredientList({ ingredients }) {
               <FormControl
                 type="hidden"
                 name={"ingredients[" + index + "]"}
-                defaultValue={ingredients[index]}
+                value={ingredient}
               />
             </ListGroup.Item>
           ))}
         </Card.Body>
 
         <Card.Footer>
-          {" "}
           <Stack 
 // @ts-ignore
-          gap="3" direction="horizontal">
+          gap="2" direction="horizontal">
             <FormControl
               id="newIngredient"
               aria-label="New Ingredient."
               placeholder="New Ingredient"
               type="text"
-              defaultValue=""
+              value={newIngredient}
               onChange={(event) => setNewIngredient(event.currentTarget.value)}
             />
             <Button
