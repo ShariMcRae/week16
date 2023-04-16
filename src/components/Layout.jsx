@@ -35,6 +35,7 @@ export default function Layout() {
   // @ts-ignore
   const { recipes, q } = useLoaderData();
   const [isHidden, setIsHidden] = useState(false);
+  const [formChanged, setFormChanged] = useState(false);
 
   const toggleClass = () => {
     setIsHidden(!isHidden);
@@ -47,8 +48,8 @@ export default function Layout() {
           <img width="50" className="ms-2" src={recipeImg} alt="Recipe Library icon." />
           <span className="ps-4 pt-2">Recipe Library</span>
         </h3>
-        <NewRecipe q={q} />
-        <RecipeList recipes={recipes} />
+        <NewRecipe q={q} context={[formChanged, setFormChanged]}/>
+        <RecipeList recipes={recipes} context={[formChanged, setFormChanged]}/>
       </div>
       <div
         id="hideBar"
@@ -57,7 +58,7 @@ export default function Layout() {
         title="Click to hide/show menu!"
       ></div>
       <div id="detail" className="px-5 py-4">
-        <Outlet />
+        <Outlet context={[formChanged, setFormChanged]}/>
       </div>
     </>
   );

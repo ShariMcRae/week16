@@ -2,7 +2,7 @@ import FormControl from "react-bootstrap/FormControl";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import { Form, useSubmit, redirect } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createRecipe } from "../../rest/recipes";
 import React from "react";
 
@@ -20,8 +20,9 @@ export async function action() {
   return redirect(`/recipes/${recipe.id}`);
 }
 
-export default function NewRecipe({ q }) {
+export default function NewRecipe({ q, context }) {
   const submit = useSubmit();
+  const [oldValue, setOldValue] = useState("");
 
   // Update the search input field if they use
   // the back or forward buttons.
@@ -41,14 +42,18 @@ export default function NewRecipe({ q }) {
             placeholder="Search"
             type="search"
             defaultValue={q}
-            // If we are entering another character in our search field,
-            // do not update the navigation stack, so our back button
-            // will take us all the way back to a blank search query.
             onChange={(event) => {
-              const isFirstSearch = q == null;
-              submit(event.currentTarget.form, {
-                replace: !isFirstSearch,
-              });
+              if (
+                !context[0] ||
+                window.confirm(
+                  "There are unsaved changes to the current recipe. Do you wish to continue?"
+                )
+              ) {
+                context[1](false);
+                setOldValue(q);
+                submit(event.currentTarget.form);
+              } else 
+                event.currentTarget.value = oldValue;
             }}
             name="q"
           />

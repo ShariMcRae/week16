@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
+import {
+  Form,
+  useLoaderData,
+  redirect,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 
 import Stack from "react-bootstrap/Stack";
 import FormGroup from "react-bootstrap/FormGroup";
@@ -19,14 +25,16 @@ export async function action({ request, params }) {
 
   // replace ingredient form entries with
   // an array of ingredients
-  const filteredKeys = Object.keys(updates).filter(key => key.startsWith("ingredients"));
+  const filteredKeys = Object.keys(updates).filter((key) =>
+    key.startsWith("ingredients")
+  );
   const ingredients = [];
   filteredKeys.forEach((key) => {
     ingredients.push(updates[key]);
     delete updates[key];
   });
 
-  await updateRecipe(updates.id, {...updates, ingredients: ingredients});
+  await updateRecipe(updates.id, { ...updates, ingredients: ingredients });
   return redirect(`/recipes/${updates.id}`);
 }
 
@@ -40,34 +48,44 @@ export async function loader({ params }) {
 
 // Render the form for editing a recipe.
 export default function EditRecipe() {
-
   // @ts-ignore
   const { recipe } = useLoaderData();
   const [newRecipe, setNewRecipe] = useState(recipe);
   const navigate = useNavigate();
+  const context = useOutletContext();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setNewRecipe({ ...newRecipe, [name]: value });
+    // @ts-ignore
+    context[1](true);
   };
 
   return (
     <Stack direction="horizontal">
-      <Form method="post">
+      <Form
+        method="post"
+        onSubmit={(event) => {
+          // @ts-ignore
+          context[1](false);
+          // @ts-ignore
+        }}
+      >
         <Row className="my-3">
           <h3>Edit Recipe</h3>
         </Row>
         <Row>
           <Col className="col-sm me-4">
-
             <FormGroup className="mb-3">
               <label>
                 <span>Description</span>
                 <FormControl
                   type="text"
                   placeholder="Description"
-                  name="description" className="mt-1"
-                  value={newRecipe.description} onChange={handleChange} 
+                  name="description"
+                  className="mt-1"
+                  value={newRecipe.description}
+                  onChange={handleChange}
                   style={{ width: "20rem" }}
                   aria-label="Description"
                 />
@@ -80,8 +98,10 @@ export default function EditRecipe() {
                 <FormControl
                   type="text"
                   placeholder="Image URL"
-                  name="imageURL" className="mt-1"
-                  value={newRecipe.imageURL} onChange={handleChange}
+                  name="imageURL"
+                  className="mt-1"
+                  value={newRecipe.imageURL}
+                  onChange={handleChange}
                   style={{ width: "20rem" }}
                   aria-label="Image URL"
                 />
@@ -89,17 +109,18 @@ export default function EditRecipe() {
             </FormGroup>
 
             <IngredientListEdit ingredients={newRecipe.ingredients} />
-
           </Col>
           <Col>
             <FormGroup className="mb-3">
               <label>
                 <span>Instructions</span>
-                <FormControl className="mt-1"
+                <FormControl
+                  className="mt-1"
                   as="textarea"
                   placeholder="Instruction"
                   name="instructions"
-                  value={newRecipe.instructions} onChange={handleChange}
+                  value={newRecipe.instructions}
+                  onChange={handleChange}
                   aria-label="Instruction"
                   style={{ height: "20rem", width: "30rem" }}
                 />
@@ -109,16 +130,24 @@ export default function EditRecipe() {
         </Row>
         <Row className="pt-2">
           <Col>
-          <FormControl
-                type="hidden"
-                name="id"
-                value={newRecipe.id}
-              />
-            <Button type="submit" className="me-2">Save</Button>
+            <FormControl type="hidden" name="id" value={newRecipe.id} />
+            <Button type="submit" className="me-2">
+              Save
+            </Button>
             <Button
               type="button"
               onClick={() => {
-                navigate(`/recipes/${newRecipe.id}`);
+                if (
+                  // @ts-ignore
+                  !context[0] ||
+                  window.confirm(
+                    "There are unsaved changes to the current recipe. Do you wish to continue?"
+                  )
+                ) {
+                  // @ts-ignore
+                  context[1](false);
+                  navigate(`/recipes/${newRecipe.id}`);
+                }
               }}
             >
               Cancel
@@ -129,4 +158,3 @@ export default function EditRecipe() {
     </Stack>
   );
 }
-
