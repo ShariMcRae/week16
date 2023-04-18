@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Form,
   useLoaderData,
   redirect,
   useNavigate,
@@ -16,6 +15,7 @@ import Col from "react-bootstrap/Col";
 
 import { updateRecipe, getRecipe } from "../../rest/recipes";
 import IngredientListEdit from "./IngredientListEdit";
+import { Form, InputGroup } from "react-bootstrap";
 
 // Save changes to the recipe, and
 // redirect to the DisplayRecipe page.
@@ -110,7 +110,27 @@ export default function EditRecipe() {
 
             <IngredientListEdit ingredients={newRecipe.ingredients} />
           </Col>
-          <Col>
+          <Col className="pt-0 mt-0">
+            <FormGroup className="mb-3">
+              <label>
+                <span>Recipe Type</span>
+                <div className="d-flex flex-nowrap mt-1">
+                  <Form.Select name="cars" id="cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                  </Form.Select>
+                  <Button
+                    className="btn-sm mx-2"
+                    title="Delete Ingredient"
+                  >
+                    ✏️
+                  </Button>{" "}
+                </div>
+              </label>
+            </FormGroup>
+
             <FormGroup className="mb-3">
               <label>
                 <span>Instructions</span>

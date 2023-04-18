@@ -43,6 +43,7 @@ export default function NewRecipe({ q, context }) {
             type="search"
             defaultValue={q}
             onChange={(event) => {
+              
               if (
                 !context[0] ||
                 window.confirm(
@@ -52,8 +53,10 @@ export default function NewRecipe({ q, context }) {
                 context[1](false);
                 setOldValue(q);
                 submit(event.currentTarget.form);
-              } else 
+              } else {
                 event.currentTarget.value = oldValue;
+                event.currentTarget.blur();
+              }
             }}
             name="q"
           />
