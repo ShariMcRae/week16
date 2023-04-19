@@ -13,7 +13,7 @@ const RECIPES_ENDPOINT =
   "https://642e25ec2b883abc6407dd04.mockapi.io/api/v1/recipes";
 
 export async function getRecipes(query, sortBy, sortOrder) {
-  return await getRecords("description", query, RECIPES_ENDPOINT, sortBy, sortOrder);
+  return await getRecords("search", query, RECIPES_ENDPOINT, sortBy, sortOrder);
 }
 
 export async function createRecipe() {

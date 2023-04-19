@@ -12,6 +12,7 @@ import ErrorPage from "./components/ErrorPage";
 import { action as deleteRecipe } from "./routes/delete";
 import { action as createRecipe } from "./components/recipes/NewRecipe";
 import { action as toggleStar } from "./components/recipes/FavoriteStar";
+import { action as saveRecipe } from "./components/recipes/EditRecipe";
 
 // Define our routes for React Router.
 const router = createBrowserRouter([
@@ -35,7 +36,8 @@ const router = createBrowserRouter([
           {
             path: "recipes/:recipeId/edit",
             element: <EditRecipe />,
-            loader: editRecipeLoader
+            loader: editRecipeLoader,
+            action: saveRecipe,
           },
           {
             path: "recipes/:recipeId/delete",

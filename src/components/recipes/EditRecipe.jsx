@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
+import { redirect, useLoaderData, useNavigate, useOutletContext, Form } from "react-router-dom";
 
 import {
   Stack,
@@ -7,8 +7,7 @@ import {
   FormControl,
   Button,
   Row,
-  Col,
-  Form,
+  Col, FormSelect
 } from "react-bootstrap";
 
 import { updateRecipe, getRecipe } from "../../rest/recipes";
@@ -22,6 +21,21 @@ export async function loader({ params }) {
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
   return { recipe, recipeTypes };
+}
+
+export async function action({ request, params }) {
+  const formData = await request.formData();
+  const updates = Object.fromEntries(formData);
+
+  // replace ingredient form entries with
+  // an array of ingredients
+  const filteredKeys = Object.keys(updates).filter(
+    (key) => key.startsWith("ingredients"));
+  filteredKeys.map((key) => updates[key])
+  const ingredients = filteredKeys.map((key) => updates[key]);
+
+  await updateRecipe(updates.id, { ...updates, ingredients: ingredients });
+  return redirect(`/recipes/${params.recipeId}`);
 }
 
 // Render the form for editing a recipe.
@@ -43,19 +57,11 @@ export default function EditRecipe() {
     context[1](true);
   };
 
-  async function handleSave() {
-    // @ts-ignore
-    context[1](false);
-    await updateRecipe(newRecipe.id, {
-      ...newRecipe,
-      ingredients: ingredients,
-    });
-    navigate(`/recipes/${newRecipe.id}`);
-  }
-
   return (
     <Stack direction="horizontal">
-      <Form>
+      <Form method="post" onSubmit={() => 
+// @ts-ignore
+      context[1](false)}>
         <Row className="my-3">
           <h3>Edit Recipe</h3>
         </Row>
@@ -106,7 +112,7 @@ export default function EditRecipe() {
               <label>
                 <span>Recipe Type</span>
                 <div className="d-flex flex-nowrap mt-1">
-                  <Form.Select
+                  <FormSelect
                     name="recipeType"
                     onChange={handleChange}
                     value={newRecipe.recipeType}
@@ -116,7 +122,7 @@ export default function EditRecipe() {
                         {recipeType.name}
                       </option>
                     ))}
-                  </Form.Select>
+                  </FormSelect>
                 </div>
               </label>
             </FormGroup>
@@ -141,7 +147,7 @@ export default function EditRecipe() {
         <Row className="pt-2">
           <Col>
             <FormControl type="hidden" name="id" value={newRecipe.id} />
-            <Button type="button" onClick={() => handleSave()} className="me-2">
+            <Button type="submit" className="me-2">
               Save
             </Button>
             <Button
