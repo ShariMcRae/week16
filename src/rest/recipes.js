@@ -16,7 +16,15 @@ export async function getRecipes(query, sortBy, sortOrder) {
   return await getRecords("description", query, RECIPES_ENDPOINT, sortBy, sortOrder);
 }
 
-export async function createRecipe(recipe) {
+export async function createRecipe() {
+  let recipe = {
+    description: "",
+    instructions: "",
+    ingredients: [],
+    imageURL: "",
+    recipeType: "",
+    favorite: false,
+  };
   return createRecord(RECIPES_ENDPOINT, recipe);
 }
 
@@ -25,6 +33,7 @@ export async function getRecipe(id) {
 }
 
 export async function updateRecipe(id, updatedRecipe) {
+console.log("updateRecipe");  
   return updateRecord(RECIPES_ENDPOINT, id, updatedRecipe)
 }
 

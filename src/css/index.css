@@ -215,13 +215,13 @@ div.center-on-page {
   height: 80%;
 } 
 
-div.ingredient-list-item {
+div.recipe-list-item {
   padding: 2px;
   padding-left: .5rem;
   padding-bottom: 4px;
 }
 
-div.ingredient-list-item:hover {
+div.recipe-list-item:hover {
   background: #f3f2f2;
 }
 

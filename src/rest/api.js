@@ -4,12 +4,15 @@
 export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
   try {
     const url = new URL(endpoint);
-    url.searchParams.append(searchBy, query ? query : "");
-    url.searchParams.append('sortBy', sortBy);
-    url.searchParams.append('order', sortOrder);
+    if (query)
+      url.searchParams.append(searchBy, query);
+    if (sortBy)
+      url.searchParams.append('sortBy', sortBy);
+    if (sortOrder)
+      url.searchParams.append('order', sortOrder ? sortOrder : "");
     const resp = await fetch(url);
     const records = await resp.json();
-    if (!records) return [];
+    if (records === 'Not found') return [];
     else return records;
   } catch (e) {
     const msg = "Error occurred in getRecords method: " + 
@@ -21,6 +24,7 @@ export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
 
 export async function createRecord(endpoint, newRecord) {
   try {
+console.log("createRecord, newRecord", newRecord);    
     const resp = await fetch(`${endpoint}`, {
       method: "POST",
       headers: {
@@ -39,7 +43,7 @@ export async function createRecord(endpoint, newRecord) {
 export async function getRecord(endpoint, id) {
   try {
     const url = new URL(endpoint);
-    url.searchParams.append("id", id);
+    url.searchParams.append("id", id ? id : "");
     const resp = await fetch(url);
     const data = await resp.json();
     return data ? data[0] ?? null : {};

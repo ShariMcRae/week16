@@ -10,6 +10,9 @@ import React from "react";
 export async function loader({ params }) {
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
+  else {
+    recipe.description += recipe.recipeType ? " (" + recipe.recipeType + ")" : "";
+  }
   return { recipe };
 }
 

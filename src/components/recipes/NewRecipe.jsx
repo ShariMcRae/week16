@@ -9,18 +9,13 @@ import React from "react";
 // Create a new recipe record when they click
 // the New button and navigate to the edit recipe page.
 export async function action() {
-  let recipe = {
-    description: "",
-    instructions: "",
-    ingredients: [],
-    imageURL: "",
-    favorite: false,
-  };
-  recipe = await createRecipe(recipe);
+
+  const recipe = await createRecipe();
+console.log("NewRecipe action, recipe", recipe);  
   return redirect(`/recipes/${recipe.id}`);
 }
 
-export default function NewRecipe({ q, context }) {
+export default function NewRecipe({ q, formChanged, setFormChanged }) {
   const submit = useSubmit();
   const [oldValue, setOldValue] = useState("");
 
@@ -45,12 +40,12 @@ export default function NewRecipe({ q, context }) {
             onChange={(event) => {
               
               if (
-                !context[0] ||
+                !formChanged ||
                 window.confirm(
                   "There are unsaved changes to the current recipe. Do you wish to continue?"
                 )
               ) {
-                context[1](false);
+                setFormChanged(false);
                 setOldValue(q);
                 submit(event.currentTarget.form);
               } else {

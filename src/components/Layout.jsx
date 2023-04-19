@@ -13,9 +13,17 @@ import React from "react";
 export async function loader({ request }) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
-  const recipes = await getRecipes(q);
+  let recipes = await getRecipes(q);
+  recipes = recipes.map(fullName);
   recipes.sort(compareFn);
   return { recipes, q };
+}
+
+function fullName(recipe) {
+  recipe.description =  
+    (recipe.recipeType ? recipe.recipeType + ": " : "") + 
+    (recipe.description ? recipe.description : "");
+  return recipe;
 }
 
 function compareFn(a, b) {
@@ -48,8 +56,8 @@ export default function Layout() {
           <img width="50" className="ms-2" src={recipeImg} alt="Recipe Library icon." />
           <span className="ps-4 pt-2">Recipe Library</span>
         </h3>
-        <NewRecipe q={q} context={[formChanged, setFormChanged]}/>
-        <RecipeList recipes={recipes} context={[formChanged, setFormChanged]}/>
+        <NewRecipe q={q} formChanged={formChanged} setFormChanged={setFormChanged}/>
+        <RecipeList recipes={recipes} formChanged={formChanged} setFormChanged={setFormChanged}/>
       </div>
       <div
         id="hideBar"

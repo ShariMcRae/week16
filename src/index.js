@@ -4,8 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import DisplayRecipe, { loader as recipeLoader } from "./components/recipes/DisplayRecipe";
 import Layout, { loader as layoutLoader } from "./components/Layout";
-import EditRecipe, { loader as editRecipeLoader, action as saveRecipe } 
-  from "./components/recipes/EditRecipe";
+import EditRecipe, { loader as editRecipeLoader } from "./components/recipes/EditRecipe";
 
 import Default from "./components/Default";
 import ErrorPage from "./components/ErrorPage";
@@ -36,8 +35,7 @@ const router = createBrowserRouter([
           {
             path: "recipes/:recipeId/edit",
             element: <EditRecipe />,
-            loader: editRecipeLoader,
-            action: saveRecipe,
+            loader: editRecipeLoader
           },
           {
             path: "recipes/:recipeId/delete",

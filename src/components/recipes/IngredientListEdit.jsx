@@ -11,16 +11,22 @@ import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 
-export default function IngredientListEdit({ ingredients }) {
-
+export default function IngredientListEdit({
+  ingredients,
+  setIngredients,
+  setFormChanged,
+}) {
   const [newIngredient, setNewIngredient] = useState("");
   const [newIngredients, setNewIngredients] = useState(
-    ingredients ? ingredients : []);
+    ingredients ? ingredients : []
+  );
 
   const removeIngredient = (index) => {
     let temp = [...newIngredients];
     temp.splice(index, 1);
     setNewIngredients(temp);
+    setIngredients(temp);
+    setFormChanged(true);
   };
 
   const addIngredient = () => {
@@ -28,6 +34,8 @@ export default function IngredientListEdit({ ingredients }) {
     temp.push(newIngredient);
     setNewIngredient("");
     setNewIngredients(temp);
+    setIngredients(temp);
+    setFormChanged(true);
   };
 
   return (
@@ -44,9 +52,9 @@ export default function IngredientListEdit({ ingredients }) {
         </Card.Header>
         <Card.Body className="p-0">
           {newIngredients.map((ingredient, index) => (
-            <ListGroup.Item className="ingredient-list-item border" key={index}>
+            <ListGroup.Item className="recipe-list-item border" key={index}>
               <Button
-                className="btn-sm me-1 pt-0 pb-0 me-2"
+                className="btn-sm pt-0 pb-0 me-2"
                 title="Delete Ingredient"
                 onClick={() => removeIngredient(index)}
               >
@@ -64,9 +72,11 @@ export default function IngredientListEdit({ ingredients }) {
         </Card.Body>
 
         <Card.Footer>
-          <Stack 
-// @ts-ignore
-          gap="2" direction="horizontal">
+          <Stack
+            // @ts-ignore
+            gap="2"
+            direction="horizontal"
+          >
             <FormControl
               id="newIngredient"
               aria-label="New Ingredient."

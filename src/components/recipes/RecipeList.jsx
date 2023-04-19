@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { Badge, ListGroup, Nav } from "react-bootstrap";
 import React from "react";
 
-export default function RecipeList({ recipes, q, context }) {
+export default function RecipeList({ recipes, formChanged, setFormChanged }) {
   return (
     <Nav id="recipes">
       {recipes.length ? (
@@ -13,12 +13,12 @@ export default function RecipeList({ recipes, q, context }) {
               to={`recipes/${recipe.id}`}
               onClick={(event) => {
                 if (
-                  !context[0] ||
+                  !formChanged ||
                   window.confirm(
                     "There are unsaved changes to the current recipe. Do you wish to continue?"
                   )
                 )
-                  context[1](false);
+                setFormChanged(false);
                 else event.preventDefault();
               }}
             >

@@ -1,55 +1,37 @@
 import React, { useState } from "react";
-import {
-  useLoaderData,
-  redirect,
-  useNavigate,
-  useOutletContext,
-} from "react-router-dom";
+import { useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
 
-import Stack from "react-bootstrap/Stack";
-import FormGroup from "react-bootstrap/FormGroup";
-import FormControl from "react-bootstrap/FormControl";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import {
+  Stack,
+  FormGroup,
+  FormControl,
+  Button,
+  Row,
+  Col,
+  Form,
+} from "react-bootstrap";
 
 import { updateRecipe, getRecipe } from "../../rest/recipes";
 import IngredientListEdit from "./IngredientListEdit";
-import { Form, InputGroup } from "react-bootstrap";
-
-// Save changes to the recipe, and
-// redirect to the DisplayRecipe page.
-export async function action({ request, params }) {
-  const formData = await request.formData();
-  const updates = Object.fromEntries(formData);
-
-  // replace ingredient form entries with
-  // an array of ingredients
-  const filteredKeys = Object.keys(updates).filter((key) =>
-    key.startsWith("ingredients")
-  );
-  const ingredients = [];
-  filteredKeys.forEach((key) => {
-    ingredients.push(updates[key]);
-    delete updates[key];
-  });
-
-  await updateRecipe(updates.id, { ...updates, ingredients: ingredients });
-  return redirect(`/recipes/${updates.id}`);
-}
+import { getRecipeTypes } from "../../rest/recipeTypes";
 
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
 export async function loader({ params }) {
+  const recipeTypes = await getRecipeTypes();
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
-  return { recipe };
+  return { recipe, recipeTypes };
 }
 
 // Render the form for editing a recipe.
 export default function EditRecipe() {
   // @ts-ignore
-  const { recipe } = useLoaderData();
+  const { recipe, recipeTypes } = useLoaderData();
+  // @ts-ignore
+  const [ingredients, setIngredients] = useState(
+    recipe.ingredients ? recipe.ingredients : []
+  );
   const [newRecipe, setNewRecipe] = useState(recipe);
   const navigate = useNavigate();
   const context = useOutletContext();
@@ -61,16 +43,19 @@ export default function EditRecipe() {
     context[1](true);
   };
 
+  async function handleSave() {
+    // @ts-ignore
+    context[1](false);
+    await updateRecipe(newRecipe.id, {
+      ...newRecipe,
+      ingredients: ingredients,
+    });
+    navigate(`/recipes/${newRecipe.id}`);
+  }
+
   return (
     <Stack direction="horizontal">
-      <Form
-        method="post"
-        onSubmit={(event) => {
-          // @ts-ignore
-          context[1](false);
-          // @ts-ignore
-        }}
-      >
+      <Form>
         <Row className="my-3">
           <h3>Edit Recipe</h3>
         </Row>
@@ -107,26 +92,31 @@ export default function EditRecipe() {
                 />
               </label>
             </FormGroup>
-
-            <IngredientListEdit ingredients={newRecipe.ingredients} />
+            <IngredientListEdit
+              ingredients={ingredients}
+              setIngredients={setIngredients}
+              setFormChanged={
+                // @ts-ignore
+                context[1]
+              }
+            />
           </Col>
           <Col className="pt-0 mt-0">
             <FormGroup className="mb-3">
               <label>
                 <span>Recipe Type</span>
                 <div className="d-flex flex-nowrap mt-1">
-                  <Form.Select name="cars" id="cars">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                  </Form.Select>
-                  <Button
-                    className="btn-sm mx-2"
-                    title="Delete Ingredient"
+                  <Form.Select
+                    name="recipeType"
+                    onChange={handleChange}
+                    value={newRecipe.recipeType}
                   >
-                    ✏️
-                  </Button>{" "}
+                    {recipeTypes.map((recipeType) => (
+                      <option value={recipeType.name} key={recipeType.id}>
+                        {recipeType.name}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </div>
               </label>
             </FormGroup>
@@ -151,7 +141,7 @@ export default function EditRecipe() {
         <Row className="pt-2">
           <Col>
             <FormControl type="hidden" name="id" value={newRecipe.id} />
-            <Button type="submit" className="me-2">
+            <Button type="button" onClick={() => handleSave()} className="me-2">
               Save
             </Button>
             <Button
