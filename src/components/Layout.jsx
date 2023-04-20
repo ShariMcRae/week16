@@ -21,7 +21,7 @@ export async function loader({ request }) {
 
 function fullName(recipe) {
   recipe.description =  
-    (recipe.recipeType ? recipe.recipeType + ": " : "") + 
+    (recipe.recipeType ? recipe.recipeType + " - " : "") + 
     (recipe.description ? recipe.description : "");
   return recipe;
 }
@@ -45,10 +45,6 @@ export default function Layout() {
   const [isHidden, setIsHidden] = useState(false);
   const [formChanged, setFormChanged] = useState(false);
 
-  const toggleClass = () => {
-    setIsHidden(!isHidden);
-  };
-
   return (
     <>
       <div id="sidebar" className={` ${isHidden ? "hidden" : ""}`}>
@@ -61,7 +57,7 @@ export default function Layout() {
       </div>
       <div
         id="hideBar"
-        onClick={toggleClass}
+        onClick={() => setIsHidden(!isHidden)}
         data-toggle="tooltip"
         title="Click to hide/show menu!"
       ></div>

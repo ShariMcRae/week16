@@ -13,11 +13,12 @@ import {
 import { updateRecipe, getRecipe } from "../../rest/recipes";
 import IngredientListEdit from "./IngredientListEdit";
 import { getRecipeTypes } from "../../rest/recipeTypes";
+import EditRecipeTypeList from "./EditRecipeTypeList";
 
 // Load the data for the specified recipe.
 // If recipe not found, throw an error.
 export async function loader({ params }) {
-  const recipeTypes = await getRecipeTypes();
+  const recipeTypes = await getRecipeTypes("", "typeName", "asc");
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
   return { recipe, recipeTypes };
@@ -46,6 +47,7 @@ export default function EditRecipe() {
   const [ingredients, setIngredients] = useState(
     recipe.ingredients ? recipe.ingredients : []
   );
+  const [newRecipeTypes, setNewRecipeTypes] = useState(recipeTypes);
   const [newRecipe, setNewRecipe] = useState(recipe);
   const navigate = useNavigate();
   const context = useOutletContext();
@@ -60,7 +62,7 @@ export default function EditRecipe() {
   return (
     <Stack direction="horizontal">
       <Form method="post" onSubmit={() => 
-// @ts-ignore
+      // @ts-ignore
       context[1](false)}>
         <Row className="my-3">
           <h3>Edit Recipe</h3>
@@ -72,7 +74,7 @@ export default function EditRecipe() {
                 <span>Description</span>
                 <FormControl
                   type="text"
-                  placeholder="Description"
+                  placeholder=""
                   name="description"
                   className="mt-1"
                   value={newRecipe.description}
@@ -88,7 +90,7 @@ export default function EditRecipe() {
                 <span>Image URL</span>
                 <FormControl
                   type="text"
-                  placeholder="Image URL"
+                  placeholder=""
                   name="imageURL"
                   className="mt-1"
                   value={newRecipe.imageURL}
@@ -113,16 +115,20 @@ export default function EditRecipe() {
                 <span>Recipe Type</span>
                 <div className="d-flex flex-nowrap mt-1">
                   <FormSelect
-                    name="recipeType"
+                    name="recipeTypeId" className="me-2"
                     onChange={handleChange}
-                    value={newRecipe.recipeType}
+                    value={newRecipe.recipeTypeId}
                   >
-                    {recipeTypes.map((recipeType) => (
-                      <option value={recipeType.name} key={recipeType.id}>
-                        {recipeType.name}
+                      <option value={0} key={0}>
+                        
+                      </option>                    
+                    {newRecipeTypes.map((recipeType) => (
+                      <option value={recipeType.id} key={recipeType.id}>
+                        {recipeType.typeName}
                       </option>
                     ))}
                   </FormSelect>
+                  <EditRecipeTypeList recipeTypes={newRecipeTypes} setRecipeTypes={setNewRecipeTypes}/>
                 </div>
               </label>
             </FormGroup>
@@ -133,7 +139,7 @@ export default function EditRecipe() {
                 <FormControl
                   className="mt-1"
                   as="textarea"
-                  placeholder="Instruction"
+                  placeholder=""
                   name="instructions"
                   value={newRecipe.instructions}
                   onChange={handleChange}

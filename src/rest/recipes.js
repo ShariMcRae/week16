@@ -5,6 +5,7 @@ import {
   updateRecord,
   deleteRecord
  } from "./api";
+ import { getRecipeType, getRecipeTypes } from "./recipeTypes";
 
 // Provides CRUD methods for accessing 
 // recipes located at MockApi.com.
@@ -13,7 +14,17 @@ const RECIPES_ENDPOINT =
   "https://642e25ec2b883abc6407dd04.mockapi.io/api/v1/recipes";
 
 export async function getRecipes(query, sortBy, sortOrder) {
-  return await getRecords("search", query, RECIPES_ENDPOINT, sortBy, sortOrder);
+console.log("getRecipes");
+  let recipes = await getRecords("search", query, RECIPES_ENDPOINT, sortBy, sortOrder);
+  const recipeTypes = await getRecipeTypes("", "id", "asc");
+  let temp = recipes.map((recipe) => {
+console.log("recipe.recipeTypeId", recipe.recipeTypeId);
+    const recipeType = recipeTypes.filter(recipeType => recipeType.id === recipe.recipeTypeId);
+console.log("recipeType", recipeType);
+    return {...recipe, recipeType: recipeType.length?recipeType[0].typeName:""};
+  });
+console.log("getRecipes returning ", temp);  
+  return temp;
 }
 
 export async function createRecipe() {
@@ -22,18 +33,28 @@ export async function createRecipe() {
     instructions: "",
     ingredients: [],
     imageURL: "",
-    recipeType: "",
+    recipeTypeId: "",
     favorite: false,
   };
   return createRecord(RECIPES_ENDPOINT, recipe);
 }
 
 export async function getRecipe(id) {
-  return getRecord(RECIPES_ENDPOINT, id);
+  const recipe = await getRecord(RECIPES_ENDPOINT, id);
+
+  console.log("recipe", recipe);
+  if (!recipe) throw new Error("Recipe with id " + id + " does not exist.");
+  //else return {id: "0", name: ""};
+
+
+  const recipeType = await getRecipeType(recipe.recipeTypeId);
+console.log("getRecipe, recipe", recipe);
+console.log("getRecipe, recipeType", recipeType);
+  recipe.recipeType = recipeType.name;
+  return recipe;
 }
 
-export async function updateRecipe(id, updatedRecipe) {
-console.log("updateRecipe");  
+export async function updateRecipe(id, updatedRecipe) { 
   return updateRecord(RECIPES_ENDPOINT, id, updatedRecipe)
 }
 

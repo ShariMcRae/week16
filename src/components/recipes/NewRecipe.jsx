@@ -9,9 +9,7 @@ import React from "react";
 // Create a new recipe record when they click
 // the New button and navigate to the edit recipe page.
 export async function action() {
-
   const recipe = await createRecipe();
-console.log("NewRecipe action, recipe", recipe);  
   return redirect(`/recipes/${recipe.id}`);
 }
 

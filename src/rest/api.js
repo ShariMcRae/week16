@@ -11,7 +11,9 @@ export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
     if (sortOrder)
       url.searchParams.append('order', sortOrder ? sortOrder : "");
     const resp = await fetch(url);
+  console.log("resp", resp);
     const records = await resp.json();
+  console.log("records", records);
     if (records === 'Not found') return [];
     else return records;
   } catch (e) {
@@ -23,8 +25,7 @@ export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
 }
 
 export async function createRecord(endpoint, newRecord) {
-  try {
-console.log("createRecord, newRecord", newRecord);    
+  try { 
     const resp = await fetch(`${endpoint}`, {
       method: "POST",
       headers: {
@@ -43,8 +44,10 @@ console.log("createRecord, newRecord", newRecord);
 export async function getRecord(endpoint, id) {
   try {
     const url = new URL(endpoint);
-    url.searchParams.append("id", id ? id : "");
+    url.searchParams.append("id", id ? id : "0");
     const resp = await fetch(url);
+console.log("resp", resp);
+    
     const data = await resp.json();
     return data ? data[0] ?? null : {};
   } catch (e) {
@@ -55,6 +58,8 @@ export async function getRecord(endpoint, id) {
 }
 
 export async function updateRecord(endpoint, id, updatedRecord) {
+console.log("updateRecord, updatedRecord", updatedRecord);
+console.log("updateRecord, id", id);
   try {
     const resp = await fetch(`${endpoint}/${id}`, {
       method: "PUT",

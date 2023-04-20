@@ -80,7 +80,7 @@ export default function IngredientListEdit({
             <FormControl
               id="newIngredient"
               aria-label="New Ingredient."
-              placeholder="New Ingredient"
+              placeholder=""
               type="text"
               value={newIngredient}
               onChange={(event) => setNewIngredient(event.currentTarget.value)}
