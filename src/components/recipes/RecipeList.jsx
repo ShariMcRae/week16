@@ -10,8 +10,8 @@ export default function RecipeList({
   q,
   qType,
   recipes,
-  formChanged,
-  setFormChanged,
+  unsavedChanges,
+  setUnsavedChanges,
 }) {
   return (
     <Nav id="recipes">
@@ -23,12 +23,12 @@ export default function RecipeList({
               to={`recipes/${recipe.id}?q=${q ? q : ""}&qType=${qType}`}
               onClick={(event) => {
                 if (
-                  !formChanged ||
+                  !unsavedChanges ||
                   window.confirm(
                     "There are unsaved changes to the current recipe. Do you wish to continue?"
                   )
                 )
-                  setFormChanged(false);
+                  setUnsavedChanges(false);
                 else event.preventDefault();
               }}
             >

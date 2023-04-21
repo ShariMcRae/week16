@@ -80,7 +80,7 @@ export default function EditRecipe() {
     const { name, value } = event.target;
     setNewRecipe({ ...newRecipe, [name]: value });
     // @ts-ignore
-    // Call setFormChanged from context
+    // Call setUnsavedChanges from context
     // to indicate unsaved changes.
     context[1](true);
   };
@@ -127,7 +127,7 @@ export default function EditRecipe() {
           <IngredientListEdit
             ingredients={ingredients}
             setIngredients={setIngredients}
-            setFormChanged={
+            setUnsavedChanges={
               // @ts-ignore
               context[1]
             }
@@ -190,7 +190,7 @@ export default function EditRecipe() {
               ) {
                 // @ts-ignore
                 context[1](false);
-                navigate(`/recipes/${newRecipe.id}`);
+                navigate(`/recipes/${newRecipe.id}?q=${q}&qType=${qType}`);
               }
             }}
           >

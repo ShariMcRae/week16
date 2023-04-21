@@ -16,7 +16,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 export default function IngredientListEdit({
   ingredients,
   setIngredients,
-  setFormChanged,
+  setUnsavedChanges,
 }) {
 
   const [newIngredient, setNewIngredient] = useState("");
@@ -25,7 +25,7 @@ export default function IngredientListEdit({
     let temp = [...ingredients];
     temp.splice(index, 1);
     setIngredients(temp);
-    setFormChanged(true);
+    setUnsavedChanges(true);
   };
 
   const addIngredient = () => {
@@ -33,7 +33,7 @@ export default function IngredientListEdit({
     temp.push(newIngredient);
     setNewIngredient("");
     setIngredients(temp);
-    setFormChanged(true);
+    setUnsavedChanges(true);
   };
 
   return (
