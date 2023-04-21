@@ -1,22 +1,3 @@
-
-
-span.body-format {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-  sans-serif;  
-font-size: 1rem;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 h5.recipeList {
   padding:0;
   margin-right: 0;
@@ -29,54 +10,15 @@ h5.recipeList {
   padding-right:0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
 html,
 body {
   height: 100%;
-  margin: 0;
-  line-height: 1.5;
-  color: #121212;
 }
- 
+
 textarea, select,
 input, 
 button {
-  font-size: 1rem;
-  font-family: inherit;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
   box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
-  background-color: white;
-  line-height: 1.5;
-  margin: 0;
-} 
-
-/* select {
-  font-size: 1rem;
-  font-family: inherit;
-  border: none;
-  border-radius: 8px;
-  padding: 0;
-  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
-  background-color: white;
-  margin: 0;
-}  */
-
-.input-group {
-
-  border-radius: 8px;
-  border:solid 1px hsla(0, 0%, 55%, 0.6);
-
-  /* box-shadow: 0 0px 2px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2); */
-} 
-
-.gear {
-  border-radius: 18px;
 } 
 
 textarea:hover, select:hover,
@@ -85,17 +27,13 @@ button:hover {
   box-shadow: 0 0px 2px hsla(0, 0%, 0%, 0.6), 0 1px 2px hsla(0, 0%, 0%, 0.2);
 }
 
-button:active {
-  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.4);
-  transform: translateY(1px);
-}
-
 #recipe h3 {
   display: flex;
   align-items: center;
   margin-top: 1rem;
   gap: 1rem;
 }
+
 #recipe h3 form button {
   box-shadow: none;
   border:none;
@@ -104,16 +42,14 @@ button:active {
   font-weight: 400;
   padding: 0;
 }
+
 #recipe h3 form button[value="true"] {
   color: #a4a4a4;
 }
+
 #recipe h3 form button[value="true"]:hover,
 #recipe h3 form button[value="false"] {
   color: #eeb004;
-}
-
-form[action$="destroy"] button {
-  color: #f44250;
 }
 
 button.btn-primary {
@@ -121,7 +57,6 @@ button.btn-primary {
   border-color: #9e9b9b;
   color: black;
 }
-
 
 #root {
   display: flex;
@@ -145,7 +80,6 @@ button.btn-primary {
 
 #sidebar h3 {
   padding: 1rem 01rem;
-  /* border-top: solid 1px rgb(161, 160, 160); */
   order: 1;
   margin-bottom: 0;
 }
@@ -166,7 +100,6 @@ button.btn-primary {
   background-color: rgb(215, 228, 252);
 }
 
-
 #recipes.nav {
   flex: 1;
   overflow: auto;
@@ -182,11 +115,6 @@ button.btn-primary {
 
 #recipes.nav a.active div {
   background-color: rgb(221, 232, 252);
-}
-
-#recipes.nav a div {
-  /* padding: 0.5rem; */
-  margin-bottom: 0;
 }
 
 #recipes.nav a {
@@ -222,7 +150,11 @@ div.center-on-page {
   justify-content: center;
   width: 100%;
   height: 80%;
-} 
+}  
+
+div.error-page {
+  margin:5rem;
+}
 
 div.recipe-list-item {
   padding: 2px;
@@ -248,15 +180,19 @@ div.recipe-list-item:hover {
   background-color: rgb(226, 228, 230);
   cursor: ew-resize;
 }
+
 div.card-header {
   background-color: rgb(215, 228, 252);
 }
+
 div.card-footer {
   background-color: rgb(215, 228, 252);
 }
+
 div.modal-header {
   background-color: rgb(215, 228, 252);
 }
+
 div.modal-footer {
   background-color: rgb(215, 228, 252);
 }
