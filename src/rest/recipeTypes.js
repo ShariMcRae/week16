@@ -12,8 +12,8 @@ import {
 const RECIPE_TYPES_ENDPOINT =
   "https://642e25ec2b883abc6407dd04.mockapi.io/api/v1/recipeTypes";
 
+// Load all recipe types and sort them by typeName using the parameters.
 export async function getRecipeTypes(query, sortBy, sortOrder) {
-console.log("getRecipeTypes, query", query);
   const records = await getRecords(
     "typeName",
     query,
@@ -21,45 +21,45 @@ console.log("getRecipeTypes, query", query);
     sortBy,
     sortOrder
   );
-console.log("getRecipeTypes, records", records);
   return records;
 }
 
-export async function createRecipeType(recipeType) {
-console.log("createRecipeType, recipeType", recipeType);  
+// Create a new recipe type.
+export async function createRecipeType(recipeType) { 
   return await createRecord(RECIPE_TYPES_ENDPOINT, recipeType);
 }
 
+// Load one recipe type by id.
 export async function getRecipeType(id) {
   const recipeType = await getRecord(RECIPE_TYPES_ENDPOINT, id);
-console.log("recipeType", recipeType);
   if (recipeType) return recipeType;
   else return {id: "0", typeName: ""};
-  //return record;
 }
 
+// Update an array of recipe type records, 
+// creating new records for those having no id.
 export async function updateRecipeTypes(updatedRecipeTypes) {
-console.log("updateRecipeTypes, updatedRecipeTypes=", updatedRecipeTypes);
-
-  updatedRecipeTypes.forEach(async (recipeType) => {
-    if (recipeType.id) {
-      await updateRecord(
-        RECIPE_TYPES_ENDPOINT,
-        recipeType.id,
-        recipeType
-      );
+  updatedRecipeTypes.forEach(async (recipeType) => 
+    {
+      if (recipeType.id) {
+        await updateRecord(
+          RECIPE_TYPES_ENDPOINT,
+          recipeType.id,
+          recipeType
+        );
+      }
+      else 
+        await createRecipeType(recipeType);
     }
-    else {
-console.log("creating record, recipeType", recipeType);
-      await createRecipeType(recipeType);
-    }
-  });
+  );
 }
 
+// Update an individual recipe type record.
 export async function updateRecipeType(id, updatedRecipeType) {
   return await updateRecord(RECIPE_TYPES_ENDPOINT, id, updatedRecipeType);
 }
 
+// Delete an individual recipe type record.
 export async function deleteRecipeType(id) {
   return await deleteRecord(RECIPE_TYPES_ENDPOINT, id);
 }

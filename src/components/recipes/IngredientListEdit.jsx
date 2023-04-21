@@ -11,29 +11,27 @@ import FormGroup from "react-bootstrap/FormGroup";
 import FormControl from "react-bootstrap/FormControl";
 import ListGroup from "react-bootstrap/ListGroup";
 
+// Create a card to hold the list of ingredients.
+// Allow for rows to be deleted and added.
 export default function IngredientListEdit({
   ingredients,
   setIngredients,
   setFormChanged,
 }) {
+
   const [newIngredient, setNewIngredient] = useState("");
-  const [newIngredients, setNewIngredients] = useState(
-    ingredients ? ingredients : []
-  );
 
   const removeIngredient = (index) => {
-    let temp = [...newIngredients];
+    let temp = [...ingredients];
     temp.splice(index, 1);
-    setNewIngredients(temp);
     setIngredients(temp);
     setFormChanged(true);
   };
 
   const addIngredient = () => {
-    let temp = [...newIngredients];
+    let temp = [...ingredients];
     temp.push(newIngredient);
     setNewIngredient("");
-    setNewIngredients(temp);
     setIngredients(temp);
     setFormChanged(true);
   };
@@ -51,7 +49,7 @@ export default function IngredientListEdit({
           </Container>
         </Card.Header>
         <Card.Body className="p-0">
-          {newIngredients.map((ingredient, index) => (
+          {ingredients.map((ingredient, index) => (
             <ListGroup.Item className="recipe-list-item border" key={index}>
               <Button
                 className="btn-sm pt-0 pb-0 me-2"

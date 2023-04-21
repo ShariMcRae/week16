@@ -1,26 +1,36 @@
+import React from "react";
 import { Form, useLoaderData } from "react-router-dom";
-import { getRecipe } from "../../rest/recipes";
+
+import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import FavoriteStar from "./FavoriteStar";
-import React from "react";
 
-// Load the data for the specified recipe.
-// If recipe not found, throw an error.
-export async function loader({ params }) {
+import FavoriteStar from "./FavoriteStar";
+import { getRecipe } from "../../rest/recipes";
+
+// Load the recipe. Throw an error if it's not found.
+// Put the recipe type in the description. 
+// Pass along search/filter parameters, 
+// so our menu doesn't change.
+export async function loader({ params, request }) {
   const recipe = await getRecipe(params.recipeId);
   if (!recipe) throw new Error("Recipe not found.");
-  else {
-    recipe.description += recipe.recipeType ? " (" + recipe.recipeType + ")" : "";
-  }
-  return { recipe };
+  else
+    recipe.description += recipe.recipeType
+      ? " (" + recipe.recipeType + ")"
+      : "";
+
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const qType = url.searchParams.get("qType");
+  return { recipe, q, qType };
 }
 
 // Display specified recipe with buttons for
 // making it a favorite, editing, and deleting.
 export default function DisplayRecipe() {
   // @ts-ignore
-  const { recipe } = useLoaderData();
+  const { recipe, q, qType } = useLoaderData();
   return (
     <div id="recipe">
       <div className="me-4">
@@ -71,13 +81,15 @@ export default function DisplayRecipe() {
       <div className="pt-2">
         <div className="d-flex justify-content-start">
           <Form action="edit">
+            <FormControl type="hidden" name="q" value={q} />
+            <FormControl type="hidden" name="qType" value={qType} />
             <Button type="submit" className="me-2">
               Edit
             </Button>
           </Form>
 
           {/* We post the form when deleting (unlike when editing)
-              to trigger a refresh of the navigation pane. */}
+              to trigger a reload of the navigation pane. */}
           <Form
             method="post"
             action="delete"
@@ -90,6 +102,8 @@ export default function DisplayRecipe() {
                 event.preventDefault();
             }}
           >
+            <FormControl type="hidden" name="q" value={q} />
+            <FormControl type="hidden" name="qType" value={qType} />              
             <Button type="submit">Delete</Button>
           </Form>
         </div>

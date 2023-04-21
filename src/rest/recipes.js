@@ -13,20 +13,19 @@ import {
 const RECIPES_ENDPOINT =
   "https://642e25ec2b883abc6407dd04.mockapi.io/api/v1/recipes";
 
+// Load the recipes and for each one, add a recipeType field using
+// the recipeTypeId as a reference to the recipe types table.
 export async function getRecipes(query, sortBy, sortOrder) {
-console.log("getRecipes");
-  let recipes = await getRecords("search", query, RECIPES_ENDPOINT, sortBy, sortOrder);
+  let recipes = await getRecords("description", query, RECIPES_ENDPOINT, sortBy, sortOrder);
   const recipeTypes = await getRecipeTypes("", "id", "asc");
   let temp = recipes.map((recipe) => {
-console.log("recipe.recipeTypeId", recipe.recipeTypeId);
     const recipeType = recipeTypes.filter(recipeType => recipeType.id === recipe.recipeTypeId);
-console.log("recipeType", recipeType);
     return {...recipe, recipeType: recipeType.length?recipeType[0].typeName:""};
   });
-console.log("getRecipes returning ", temp);  
   return temp;
 }
 
+// Create a new recipe and initialize it.
 export async function createRecipe() {
   let recipe = {
     description: "",
@@ -39,25 +38,22 @@ export async function createRecipe() {
   return createRecord(RECIPES_ENDPOINT, recipe);
 }
 
+// Read one recipe and add a recipeType field using the
+// recipe recipeTypeId as a reference to the recipe types table.
 export async function getRecipe(id) {
   const recipe = await getRecord(RECIPES_ENDPOINT, id);
-
-  console.log("recipe", recipe);
   if (!recipe) throw new Error("Recipe with id " + id + " does not exist.");
-  //else return {id: "0", name: ""};
-
-
   const recipeType = await getRecipeType(recipe.recipeTypeId);
-console.log("getRecipe, recipe", recipe);
-console.log("getRecipe, recipeType", recipeType);
-  recipe.recipeType = recipeType.name;
+  recipe.recipeType = recipeType.typeName;
   return recipe;
 }
 
+// Update a recipe.
 export async function updateRecipe(id, updatedRecipe) { 
   return updateRecord(RECIPES_ENDPOINT, id, updatedRecipe)
 }
 
+// Delete a recipe.
 export async function deleteRecipe(id) {
   return deleteRecord(RECIPES_ENDPOINT, id);
 }

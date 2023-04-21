@@ -1,21 +1,22 @@
 import React from "react";
 import { useRouteError } from "react-router-dom";
 
-// Pretty much all of our errors 
-// will now be handled by this page.
-
+// Display errors in a standard way.
 export default function ErrorPage() {
   const error = useRouteError();
   console.error(error);
 
   return (
     <div className="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
+      <h1>Oh my!</h1>
+      <p>An unexpected error has occurred.</p>
       <p>
-        <i>{
-// @ts-ignore
-        error.statusText || error.message}</i>
+        <i>
+        {
+          // @ts-ignore
+          error.statusText || error.message
+        }
+        </i>
       </p>
     </div>
   );

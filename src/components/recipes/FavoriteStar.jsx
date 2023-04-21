@@ -1,7 +1,7 @@
+import React from "react";
 import { useFetcher } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { updateRecipe } from "../../rest/recipes";
-import React from "react";
 
 // Update recipe.favorite property.
 export async function action({ request, params }) {
@@ -12,6 +12,7 @@ export async function action({ request, params }) {
 }
 
 // Display a star that toggles indicating a favorite recipe.
+// Post using fetcher so menu re-renders without reloading.
 export default function FavoriteStar({ recipe }) {
   const fetcher = useFetcher();
   let favorite = recipe.favorite;

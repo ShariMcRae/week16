@@ -1,16 +1,26 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { Badge, ListGroup, Nav } from "react-bootstrap";
-import React from "react";
 
-export default function RecipeList({ recipes, formChanged, setFormChanged }) {
+// Display the list of recipes, allowing users
+// to select from them, and pass along the search/filter
+// parameters on the URL when navigating to 
+// the selected recipe.
+export default function RecipeList({
+  q,
+  qType,
+  recipes,
+  formChanged,
+  setFormChanged,
+}) {
   return (
     <Nav id="recipes">
       {recipes.length ? (
         <>
           {recipes.map((recipe) => (
-            <NavLink 
+            <NavLink
               key={recipe.id}
-              to={`recipes/${recipe.id}`}
+              to={`recipes/${recipe.id}?q=${q ? q : ""}&qType=${qType}`}
               onClick={(event) => {
                 if (
                   !formChanged ||
@@ -18,15 +28,12 @@ export default function RecipeList({ recipes, formChanged, setFormChanged }) {
                     "There are unsaved changes to the current recipe. Do you wish to continue?"
                   )
                 )
-                setFormChanged(false);
+                  setFormChanged(false);
                 else event.preventDefault();
               }}
             >
               <ListGroup>
-                <ListGroup.Item
-                  variant="flush"
-                  className="d-flex justify-content-between px-2 py-1 align-items-start"
-                >
+                <ListGroup.Item className="d-flex justify-content-between px-2 py-1">
                   <div>
                     {recipe.description ? (
                       <>{recipe.description}</>

@@ -10,15 +10,17 @@ export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
       url.searchParams.append('sortBy', sortBy);
     if (sortOrder)
       url.searchParams.append('order', sortOrder ? sortOrder : "");
+
     const resp = await fetch(url);
-  console.log("resp", resp);
+    if (resp.statusText !== "OK") throw new Error (resp.statusText);
+  
     const records = await resp.json();
-  console.log("records", records);
     if (records === 'Not found') return [];
     else return records;
+
   } catch (e) {
     const msg = "Error occurred in getRecords method: " + 
-        JSON.stringify(e) + JSON.stringify({query, endpoint, sortBy, sortOrder});
+        JSON.stringify(e) + JSON.stringify({searchBy, query, endpoint, sortBy, sortOrder});
     console.log(msg, e);
     throw new Error(msg);
   }
@@ -34,6 +36,7 @@ export async function createRecord(endpoint, newRecord) {
       body: JSON.stringify(newRecord),
     });
     return await resp.json();
+    
   } catch (e) {
     const msg = "Error occurred in createRecord method.";
     console.log(msg, e);
@@ -46,10 +49,9 @@ export async function getRecord(endpoint, id) {
     const url = new URL(endpoint);
     url.searchParams.append("id", id ? id : "0");
     const resp = await fetch(url);
-console.log("resp", resp);
-    
     const data = await resp.json();
     return data ? data[0] ?? null : {};
+
   } catch (e) {
     const msg = "Error occurred in getRecord method.";
     console.log(msg, e);
@@ -58,8 +60,6 @@ console.log("resp", resp);
 }
 
 export async function updateRecord(endpoint, id, updatedRecord) {
-console.log("updateRecord, updatedRecord", updatedRecord);
-console.log("updateRecord, id", id);
   try {
     const resp = await fetch(`${endpoint}/${id}`, {
       method: "PUT",
@@ -69,6 +69,7 @@ console.log("updateRecord, id", id);
       body: JSON.stringify(updatedRecord),
     });
     return await resp.json();
+
   } catch (e) {
     const msg = "Error occurred in updateRecord method.";
     console.log(msg, e);
@@ -85,6 +86,7 @@ export async function deleteRecord(endpoint, id) {
       },
     });
     return await resp.json();
+
   } catch (e) {
     const msg = "Error occurred in deleteRecord method.";
     console.log(msg, e);
