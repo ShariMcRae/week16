@@ -1,5 +1,5 @@
 import React from "react";
-import recipeImg from "../images/dinnerPlate.webp";
+import recipeImg from "../../images/dinnerPlate.webp";
 export default function Default() {
   return (
     <div className="center-on-page">

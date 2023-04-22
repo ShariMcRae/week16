@@ -6,7 +6,7 @@ import DisplayRecipe, { loader as recipeLoader } from "./components/recipes/Disp
 import Layout, { loader as layoutLoader } from "./components/Layout";
 import EditRecipe, { loader as editRecipeLoader } from "./components/recipes/EditRecipe";
 
-import Default from "./components/Default";
+import Default from "./components/recipes/Default";
 import ErrorPage from "./components/ErrorPage";
 
 import { action as deleteRecipe } from "./routes/delete";
