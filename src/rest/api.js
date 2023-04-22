@@ -12,7 +12,7 @@ export async function getRecords(searchBy, query, endpoint, sortBy, sortOrder) {
       url.searchParams.append('order', sortOrder ? sortOrder : "");
 
     const resp = await fetch(url);
-    if (resp.statusText !== "OK") throw new Error (resp.statusText);
+    if (resp.statusText !== "OK") throw new Error (JSON.stringify(resp));
   
     const records = await resp.json();
     if (records === 'Not found') return [];
@@ -49,6 +49,8 @@ export async function getRecord(endpoint, id) {
     const url = new URL(endpoint);
     url.searchParams.append("id", id ? id : "0");
     const resp = await fetch(url);
+    if (resp.statusText !== "OK") throw new Error (JSON.stringify(resp));
+
     const data = await resp.json();
     return data ? data[0] ?? null : {};
 

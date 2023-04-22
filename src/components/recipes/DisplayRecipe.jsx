@@ -81,8 +81,8 @@ export default function DisplayRecipe() {
       <div className="pt-2">
         <div className="d-flex justify-content-start">
           <Form action="edit">
-            <FormControl type="hidden" name="q" value={q} />
-            <FormControl type="hidden" name="qType" value={qType} />
+            <FormControl type="hidden" name="q" value={q?q:""} />
+            <FormControl type="hidden" name="qType" value={qType?qType:""} />
             <Button type="submit" className="me-2">
               Edit
             </Button>
