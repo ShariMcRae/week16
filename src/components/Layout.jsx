@@ -84,8 +84,6 @@ export default function Layout() {
             setUnsavedChanges={setUnsavedChanges}
           />
           <NewRecipe
-            q={q}
-            qType={qType}
             unsavedChanges={unsavedChanges}
             setUnsavedChanges={setUnsavedChanges}
           />

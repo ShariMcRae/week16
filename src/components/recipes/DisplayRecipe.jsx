@@ -102,8 +102,8 @@ export default function DisplayRecipe() {
                 event.preventDefault();
             }}
           >
-            <FormControl type="hidden" name="q" value={q} />
-            <FormControl type="hidden" name="qType" value={qType} />              
+            <FormControl type="hidden" name="q" value={q?q:""} />
+            <FormControl type="hidden" name="qType" value={qType?qType:""} />              
             <Button type="submit">Delete</Button>
           </Form>
         </div>

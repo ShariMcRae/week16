@@ -8,18 +8,14 @@ import { createRecipe } from "../../rest/recipes";
 
 // Create a new recipe record when they click
 // the New button and navigate to the edit recipe page.
-// Preserve the state of the search/filter menu.
-export async function action({ request }) {
+export async function action() {
   const recipe = await createRecipe();
-  const formData = await request.formData();
-  const updates = Object.fromEntries(formData);
-  const q = updates["q"];
-  const qType = updates["qType"];
-  return redirect(`/recipes/${recipe.id}?q=${q}&qType=${qType}`);
+  return redirect(`/recipes/${recipe.id}`);
 }
 
 // Display form to create new recipes.
-export default function NewRecipe({ q, qType, unsavedChanges, setUnsavedChanges }) {
+export default function NewRecipe({unsavedChanges, setUnsavedChanges }) {
+  
   return (
     <Form
       method="post"
@@ -35,8 +31,6 @@ export default function NewRecipe({ q, qType, unsavedChanges, setUnsavedChanges 
         else event.preventDefault();
       }}
     >
-      <FormControl type="hidden" name="q" value={q} />
-      <FormControl type="hidden" name="qType" value={qType} />
       <Button type="submit">New</Button>
     </Form>
   );
