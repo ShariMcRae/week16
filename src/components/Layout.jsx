@@ -73,7 +73,7 @@ export default function Layout() {
             src={recipeImg}
             alt="Recipe Library icon."
           />
-          <span className="ps-4 pt-2">Recipe Library</span>
+          <span className="ps-4 pt-2">Aubree's Recipes</span>
         </h3>
         <div className="search">
           <FilterRecipes
